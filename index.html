@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Objetos impresos en 3D con tu nombre, tu logo o tu idea. Hecho en Encarnación, envíos a todo el Paraguay.">
+<meta name="theme-color" content="#FFF3E8">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Formelia Tienda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<style>
+/* Layout: one column for the phone, a shelf of products, bottom sheets for detail and bag. Single light brand look by choice. */
+:root {
+  --cream: #FFF3E8; --paper: #FFFFFF; --ink: #17183A; --ink-2: #3A3756; --muted: #5E5872;
+  --cobalto: #2F55E8; --sol: #FFC93C; --tangerina: #FF6A3D; --pitaya: #E8368F; --pitaya-text: #C42675;
+  --wa: #1A9E52; --line: rgba(23,24,58,.12);
+  --display: 'Lexend', 'DM Sans', system-ui, sans-serif;
+  --body: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box }
+html { scroll-behavior: smooth }
+body {
+  background: var(--cream); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 120px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--cream) }
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: -0.02em; margin: 0; text-wrap: balance; line-height: 1.08 }
+p { margin: 0 }
+button { font: inherit; color: inherit; cursor: pointer }
+:focus-visible { outline: 3px solid var(--cobalto); outline-offset: 2px; border-radius: 8px }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted) }
+
+/* header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--cream); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--line); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)) }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink) }
+.brand b { font-family: var(--display); font-weight: 600; font-size: 24px; letter-spacing: -0.03em }
+.bag-btn { position: relative; display: flex; align-items: center; gap: 8px; background: var(--ink); color: var(--cream); border: 0; border-radius: 999px; padding: 10px 16px; font-weight: 700; min-height: 44px }
+.bag-btn .n { background: var(--sol); color: var(--ink); border-radius: 999px; min-width: 22px; height: 22px; display: grid; place-items: center; font-size: 13px; padding: 0 6px }
+.note { font-size: 13px; color: var(--muted); text-align: center; padding-top: 10px }
+
+/* hero */
+.hero { display: grid; gap: 28px; padding-top: 20px }
+.hero-mark { display: grid; grid-template-columns: repeat(4, 44px); gap: 8px; width: max-content }
+.hb { width: 44px; height: 44px; display: block; animation: drop .8s cubic-bezier(.34,1.56,.64,1) both; animation-delay: calc(var(--i) * 110ms) }
+.hb svg { width: 100%; height: 100%; display: block; animation: bob 3.2s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.8s) }
+@keyframes drop { from { transform: translateY(-60px) scale(.5) rotate(-35deg) } }
+@keyframes bob { to { transform: translateY(-5px) rotate(3deg) } }
+.hero h1 { font-size: clamp(40px, 11vw, 76px) }
+.hero h1 span { color: var(--cobalto) }
+.hero .lead { font-size: 19px; color: var(--ink-2); max-width: 34ch }
+.cta { display: flex; flex-wrap: wrap; gap: 10px }
+.cta .btn { flex: 1 1 100% }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 22px; border-radius: 16px; border: 0; font-weight: 700; font-size: 16px; text-decoration: none; transition: transform .15s ease }
+.btn:active { transform: scale(.97) }
+.btn-ink { background: var(--ink); color: var(--cream) }
+.btn-wa { background: var(--wa); color: #fff }
+.btn-ghost { background: var(--paper); color: var(--ink); border: 1.5px solid var(--line) }
+.btn-wide { width: 100% }
+.trust { display: flex; flex-wrap: wrap; gap: 8px }
+.trust span { font-size: 14px; font-weight: 500; background: var(--paper); border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px }
+
+/* header right side + about page */
+.brand { margin-right: auto }
+.nav-about { color: var(--ink); font-weight: 700; font-size: 15px; text-decoration: none; padding: 10px 4px; min-height: 44px; display: flex; align-items: center }
+.nav-about:hover { color: var(--cobalto) }
+.bag-ic { flex: none }
+@media (max-width: 480px) {
+  .bag-btn { padding: 10px 12px }
+  .bag-l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
+}
+.page-about { padding-top: 12px }
+.back { align-self: flex-start; background: none; border: 0; padding: 0; min-height: 44px; font-weight: 700; color: var(--cobalto) }
+.about-text .cta { margin-top: 8px }
+
+/* mobile menu */
+.menu-btn { width: 44px; height: 44px; flex: none; border-radius: 50%; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); display: grid; place-items: center; padding: 0 }
+.menu-btn .i-close { display: none }
+.menu-btn[aria-expanded="true"] .i-open { display: none }
+.menu-btn[aria-expanded="true"] .i-close { display: block }
+@keyframes menu { from { transform: translateY(-8px); opacity: 0 } }
+@media (max-width: 899px) {
+  .nav.open { display: flex; flex-direction: column; position: absolute; left: 0; right: 0; top: 100%; background: var(--cream); border-bottom: 1px solid var(--line); box-shadow: 0 18px 30px rgba(23,24,58,.10); padding: 4px max(16px, env(safe-area-inset-right, 0px)) 14px max(16px, env(safe-area-inset-left, 0px)); animation: menu .2s ease }
+  .nav.open a { color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 600; font-size: 22px; padding: 14px 0; border-bottom: 1px solid var(--line) }
+  .nav.open a:last-child { border-bottom: 0 }
+}
+@media (min-width: 900px) { .menu-btn { display: none } }
+
+/* colección del momento */
+.band-col { background: var(--colc); color: var(--colt); grid-template-columns: 1fr; gap: 22px }
+.band-col .deco { position: absolute; right: 14px; top: 16px; width: 96px; height: 120px }
+.col-txt { display: grid; gap: 12px; position: relative; min-width: 0 }
+.col-badge { justify-self: start; display: inline-flex; align-items: center; gap: 6px; background: var(--colt); color: var(--colc); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px }
+.band-col h2 { max-width: 13ch; padding-right: 70px }
+.band-col p { max-width: 34ch }
+.col-thumbs { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px }
+.col-th { border: 0; background: var(--paper); color: var(--ink); border-radius: 18px; padding: 8px; text-align: left; display: grid; gap: 6px; align-content: start; min-width: 0; transition: transform .18s ease }
+.col-th:hover { transform: translateY(-3px) }
+.col-th .art { border-radius: 12px }
+.col-th .art svg { width: 90%; height: 90% }
+.col-th b { font-size: 13px; line-height: 1.2; font-weight: 700 }
+.col-th span.p { font-size: 12px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums }
+.band-col .btn { position: relative; width: 100% }
+.chip-col b::before { content: "★ " }
+
+/* about video */
+.about-video-wrap { display: grid; gap: 16px }
+.vid-title { font-size: 28px }
+.about-video { position: relative; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; aspect-ratio: 4 / 5; max-width: 100%; border-radius: 28px; background: var(--ink); color: var(--cream); text-decoration: none; text-align: center; padding: 24px; transition: transform .2s ease }
+.about-video:hover { transform: translateY(-3px) }
+.about-video .play { width: 84px; height: 84px; border-radius: 50%; background: var(--sol); display: grid; place-items: center; padding-left: 4px; box-shadow: 0 0 0 12px rgba(255,201,60,.18); transition: transform .25s cubic-bezier(.34,1.56,.64,1) }
+.about-video:hover .play { transform: scale(1.08) }
+.vid-txt { display: grid; gap: 4px; position: relative }
+.vid-txt b { font-family: var(--display); font-weight: 600; font-size: 22px }
+.vid-txt small { font-size: 14px; opacity: .8 }
+.vid-frame { position: relative; width: min(100%, 420px); margin: 0 auto; padding: 10px }
+.vid-frame video { position: relative; z-index: 1; display: block; width: 100%; aspect-ratio: 9 / 16; max-width: 100%; border-radius: 24px; background: var(--ink); object-fit: cover; box-shadow: 0 18px 40px rgba(23,24,58,.18) }
+.vid-frame .vd { position: absolute; width: 64px; height: 64px; z-index: 2; pointer-events: none }
+.vid-frame .vd-a { right: -4px; top: -4px }
+.vid-frame .vd-b { left: -4px; bottom: -4px }
+.vid-ig { justify-self: center; color: var(--cobalto); font-weight: 700; text-decoration: none; min-height: 44px; display: flex; align-items: center }
+
+/* about */
+.about { display: grid; gap: 24px }
+.about-photo { position: relative; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 28px; background: var(--paper); border: 2px dashed rgba(23,24,58,.22); display: grid; place-items: center; text-align: center; padding: 24px; color: var(--muted) }
+.about-photo b { display: block; font-family: var(--display); font-weight: 600; font-size: 18px; color: var(--ink) }
+.about-photo small { font-size: 14px }
+.about-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit }
+.about-photo .stk { position: absolute; width: 52px; height: 52px; z-index: 1 }
+.about-photo .stk-a { left: -10px; top: -10px }
+.about-photo .stk-b { right: -10px; bottom: -10px }
+.about-text { display: grid; gap: 14px; min-width: 0 }
+.about-text h2 { font-size: 34px }
+.about-text p { font-size: 17px; color: var(--ink-2); max-width: 44ch }
+.about-sign { font-family: var(--display); font-weight: 600; font-size: 18px; color: var(--ink) !important }
+
+/* catalog */
+.cat-head { display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 90px }
+.cat-head h2 { font-size: 34px }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)) }
+.chips::-webkit-scrollbar { display: none }
+.chip { flex: none; border: 1.5px solid var(--line); background: var(--paper); border-radius: 999px; padding: 8px 16px; min-height: 44px; display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1 }
+.chip b { font-family: var(--display); font-weight: 600; font-size: 16px }
+.chip small { font-size: 12px; color: var(--muted) }
+.chip[aria-pressed="true"] { background: var(--c, var(--ink)); border-color: var(--c, var(--ink)); color: var(--on, var(--cream)) }
+.chip[aria-pressed="true"] small { color: inherit; opacity: .85 }
+.line-intro { font-size: 15px; color: var(--ink-2); min-height: 22px }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(156px, 1fr)); gap: 14px }
+.card { background: var(--paper); border: 0; border-radius: 22px; padding: 10px; text-align: left; display: flex; flex-direction: column; gap: 10px; min-width: 0; transition: transform .18s ease, box-shadow .18s ease; animation: rise .45s ease both }
+.card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(23,24,58,.10) }
+@keyframes rise { from { transform: translateY(14px) } }
+.art { aspect-ratio: 1; max-width: 100%; border-radius: 16px; display: grid; place-items: center; background: color-mix(in srgb, var(--c) 16%, var(--cream)); background-image: repeating-linear-gradient(0deg, rgba(23,24,58,.045) 0 1px, transparent 1px 7px); overflow: hidden }
+.art svg { width: 86%; height: 86%; display: block; transition: transform .3s cubic-bezier(.34,1.56,.64,1) }
+.card:hover .art svg { transform: scale(1.05) rotate(-2deg) }
+.card .tag { font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--tc) }
+.card h3 { font-size: 16px; line-height: 1.2 }
+.card .pr { font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; margin-top: auto }
+.card .pr small { font-weight: 500; color: var(--muted) }
+.card-idea { grid-column: 1 / -1; background: var(--ink); color: var(--cream); justify-content: space-between; gap: 8px; padding: 22px; text-decoration: none }
+.card-idea h3 { font-size: 20px }
+.card-idea p { font-size: 14px; opacity: .85 }
+.card-idea .go { font-weight: 700; color: var(--sol) }
+
+/* how */
+.how h2, .faq h2 { font-size: 30px; margin-bottom: 18px }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; list-style: none; padding: 0; margin: 0 }
+.steps li { background: var(--paper); border-radius: 20px; padding: 20px; display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start }
+.steps svg { width: 44px; height: 44px }
+.steps h3 { font-size: 18px; margin-bottom: 4px }
+.steps p { color: var(--ink-2); font-size: 15px }
+
+/* banners */
+.band { border-radius: 28px; padding: 28px 22px; display: grid; gap: 16px; position: relative; overflow: hidden }
+.band h2 { font-size: clamp(28px, 7vw, 40px); max-width: 16ch; position: relative }
+.band p, .band ul, .band .btn, .band .eyebrow { position: relative }
+.band ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 16px }
+.band li::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: currentColor; margin-right: 10px; opacity: .7 }
+.band-b2b { background: var(--cobalto); color: #fff }
+.band-b2b .eyebrow { color: var(--sol) }
+.band-b2b .deco { position: absolute; right: -40px; top: -40px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,.10) }
+.band-xmas { background: var(--tangerina); color: var(--ink) }
+.band-xmas .eyebrow { color: var(--ink) }
+.band-xmas .deco { position: absolute; right: 14px; top: 18px; width: 120px; height: 150px }
+.btn-light { background: var(--paper); color: var(--ink) }
+
+/* faq */
+.faq details { background: var(--paper); border-radius: 18px; padding: 4px 18px; margin-bottom: 10px }
+.faq summary { font-weight: 700; font-size: 16px; padding: 14px 0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 12px; min-height: 44px; align-items: center }
+.faq summary::-webkit-details-marker { display: none }
+.faq summary::after { content: "+"; font-family: var(--display); font-size: 22px; color: var(--cobalto); transition: transform .2s }
+.faq details[open] summary::after { transform: rotate(45deg) }
+.faq details p { padding-bottom: 16px; color: var(--ink-2) }
+
+footer { border-top: 1px solid var(--line); padding-top: 28px; display: grid; gap: 10px; color: var(--muted); font-size: 15px }
+footer .brand b { font-size: 28px }
+
+/* sheets */
+dialog.sheet { border: 0; padding: 0; margin: auto auto 0; width: 100%; max-width: 560px; max-height: 92dvh; border-radius: 28px 28px 0 0; background: var(--cream); color: var(--ink); overflow: auto }
+dialog.sheet[open] { animation: up .35s cubic-bezier(.2,.9,.25,1) }
+dialog.sheet::backdrop { background: rgba(23,24,58,.45) }
+@keyframes up { from { transform: translateY(40%) } }
+@media (min-width: 700px) { dialog.sheet { margin: auto; border-radius: 28px } }
+.sheet-in { padding: 14px max(18px, env(safe-area-inset-left, 0px)) calc(22px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 16px }
+.grab { width: 44px; height: 5px; border-radius: 9px; background: var(--line); margin: 0 auto }
+.x { position: absolute; z-index: 5; box-shadow: 0 2px 8px rgba(23,24,58,.15); right: 14px; top: 14px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--paper); font-size: 22px; line-height: 1; display: grid; place-items: center }
+.sheet .art { border-radius: 22px; position: relative }
+.sheet .art svg { width: 78%; height: 78% }
+.s-svg { width: 100%; height: 100%; display: grid; place-items: center }
+.v3d-host { position: absolute; inset: 0 }
+.v3d-host canvas { width: 100% !important; height: 100% !important; display: block; touch-action: none; cursor: grab }
+.v3d-host canvas:active { cursor: grabbing }
+.art.is3d .s-svg { visibility: hidden }
+.hint3d { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); background: rgba(23,24,58,.82); color: #FFF3E8; font-size: 13px; font-weight: 700; padding: 7px 12px; border-radius: 999px; white-space: nowrap; pointer-events: none; transition: opacity .4s }
+.art:not(.is3d) .hint3d { opacity: 0 }
+.art.touched .hint3d { opacity: 0 }
+.card .art { position: relative }
+.b3d { position: absolute; left: 8px; top: 8px; background: var(--ink); color: var(--cream); font-size: 11px; font-weight: 700; letter-spacing: .06em; padding: 3px 8px; border-radius: 999px }
+.sheet h2 { font-size: 28px; padding-right: 40px }
+.sheet .desc { color: var(--ink-2) }
+.meta { display: flex; flex-wrap: wrap; gap: 8px }
+.meta span { font-size: 13px; font-weight: 600; background: var(--paper); border-radius: 999px; padding: 5px 11px }
+.field { display: grid; gap: 8px }
+.field > label, .field > .lbl { font-weight: 700; font-size: 14px }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px }
+.sw { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--paper); background: var(--sw); box-shadow: 0 0 0 1px var(--line); padding: 0 }
+.sw[aria-checked="true"] { box-shadow: 0 0 0 3px var(--ink) }
+.swname { font-size: 14px; color: var(--muted) }
+input[type=text] { font: inherit; font-size: 18px; padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); width: 100%; min-height: 50px }
+.hint { font-size: 13px; color: var(--muted) }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap }
+.qty { display: flex; align-items: center; background: var(--paper); border-radius: 14px; border: 1.5px solid var(--line) }
+.qty button { width: 44px; height: 44px; border: 0; background: none; font-size: 22px; font-weight: 700 }
+.qty output { min-width: 36px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums }
+.total { text-align: right }
+.total small { display: block; font-size: 13px; color: var(--muted) }
+.total b { font-family: var(--display); font-size: 24px; font-variant-numeric: tabular-nums }
+.actions { display: grid; gap: 10px }
+
+.bag-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px }
+.bag-list li { background: var(--paper); border-radius: 18px; padding: 10px; display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center }
+.bag-list .art { width: 64px; border-radius: 12px }
+.bag-list h3 { font-size: 15px }
+.bag-list p { font-size: 13px; color: var(--muted) }
+.bag-list .rm { border: 0; background: none; color: var(--muted); font-size: 13px; font-weight: 700; min-height: 44px; padding: 0 6px }
+.empty { text-align: center; color: var(--muted); padding: 24px 0 }
+
+.float { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; padding: 0 max(16px, env(safe-area-inset-left, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)); pointer-events: none }
+.float button { pointer-events: auto; max-width: 560px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center; background: var(--ink); color: var(--cream); border: 0; border-radius: 18px; min-height: 58px; padding: 0 20px; font-weight: 700; box-shadow: 0 12px 30px rgba(23,24,58,.3); animation: up .3s ease }
+.float button b { color: var(--sol); font-variant-numeric: tabular-nums }
+.toast { position: fixed; left: 50%; top: calc(76px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--cream); padding: 10px 18px; border-radius: 999px; font-weight: 700; font-size: 14px; z-index: 40; animation: up .25s ease }
+
+@media (min-width: 760px) {
+  .hero { grid-template-columns: 1.4fr 1fr; align-items: center }
+  .cta .btn { flex: 0 0 auto }
+  .hero-mark { order: 2; justify-self: center; grid-template-columns: repeat(2, 120px); gap: 16px }
+  .hb { width: 120px; height: 120px }
+  .band { padding: 40px }
+}
+.nav { display: none }
+section[id] { scroll-margin-top: 90px }
+@media (min-width: 900px) {
+  .top { padding-block: 16px }
+  .nav { display: flex; gap: 28px; font-weight: 600; font-size: 15px }
+  .nav a { color: var(--ink); text-decoration: none; padding: 10px 0 }
+  .nav a:hover { color: var(--cobalto) }
+  .wrap { max-width: 1200px; gap: 96px }
+  .note { text-align: left }
+  .hero { padding-top: 40px; gap: 48px }
+  .hero-mark { grid-template-columns: repeat(2, 150px); gap: 20px }
+  .hb { width: 150px; height: 150px }
+  .hero h1 { font-size: 84px }
+  .hero .lead { font-size: 21px }
+  .cat-head { flex-direction: row; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 18px 32px }
+  .chips { margin-inline: 0; padding-inline: 0; overflow: visible; flex-wrap: wrap }
+  .line-intro { flex-basis: 100% }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 22px }
+  .card { padding: 12px }
+  .card h3 { font-size: 18px }
+  .card .pr { font-size: 16px }
+  .how h2, .faq h2 { font-size: 40px }
+  .band { grid-template-columns: 1.2fr 1fr; align-items: end; padding: 56px }
+  .band .eyebrow, .band h2 { grid-column: 1 }
+  .band h2 { font-size: 48px }
+  .faq { max-width: 820px }
+  .band-col { grid-template-columns: 1fr 1.1fr; grid-template-rows: auto auto; align-items: end; gap: 24px 48px }
+  .band-col .col-txt { grid-column: 1; grid-row: 1 }
+  .band-col .btn { grid-column: 1; grid-row: 2; align-self: start; width: auto; justify-self: start }
+  .band-col .col-thumbs { grid-column: 2; grid-row: 1 / span 2; align-self: center }
+  .band-col .deco { width: 104px; height: 130px; right: auto; left: 38%; top: 36px }
+  .col-th b { font-size: 15px }
+  .col-th span.p { font-size: 14px }
+  .nav-about { display: none }
+  .page-about { padding-top: 40px; gap: 32px }
+  .about { grid-template-columns: 0.9fr 1.1fr; align-items: center; gap: 64px }
+  .about-photo { aspect-ratio: 4 / 5 }
+  .about-video-wrap { max-width: 520px; width: 100%; margin: 0 auto; text-align: center }
+  .vid-title { font-size: 36px }
+  .about-photo .stk { width: 72px; height: 72px }
+  .about-text h2 { font-size: 48px }
+  .about-text p { font-size: 19px }
+  dialog#sheet { max-width: 1040px }
+  #sheetIn { grid-template-columns: 1.1fr 1fr; column-gap: 40px; row-gap: 18px; padding: 36px; align-items: start }
+  #sheetIn > .grab { display: none }
+  #sheetIn > #sArt { grid-column: 1; grid-row: 1 / span 8 }
+  #sheetIn > *:not(#sArt):not(.x) { grid-column: 2 }
+  .float button { max-width: 420px; margin-right: 0 }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important }
+  html { scroll-behavior: auto }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="#inicio" aria-label="Formelia, inicio">
+    <svg width="34" height="34" viewBox="0 0 128 128" aria-hidden="true"><circle cx="34" cy="34" r="28" fill="#2F55E8"/><rect x="68" y="6" width="56" height="56" rx="18" fill="#FFC93C"/><path d="M30 76 Q34 69 38 76 L60 114 Q63 122 54 122 L14 122 Q5 122 8 114 Z" fill="#FF6A3D"/><path d="M68 122 A56 56 0 0 1 124 66 L124 112 Q124 122 114 122 Z" fill="#E8368F"/></svg>
+    <b>formelia</b>
+  </a>
+  <nav class="nav" id="siteNav" aria-label="Secciones"><a href="#catalogo">Productos</a><a href="#como">Cómo pedir</a><a href="#empresas">Empresas</a><a href="#preguntas">Preguntas</a><a href="#nosotras">Nosotras</a></nav>
+  <button class="bag-btn" id="bagBtn" type="button" aria-label="Abrir tu pedido"><svg class="bag-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="bag-l">Tu pedido</span> <span class="n" id="bagN">0</span></button>
+  <button class="menu-btn" id="menuBtn" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="siteNav"><svg class="i-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg><svg class="i-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</header>
+
+<main class="wrap" id="inicio">
+  <p class="note">Precios de ejemplo</p>
+
+  <section class="hero">
+    <div class="hero-mark" aria-hidden="true">
+      <span class="hb" style="--i:0"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#2F55E8"/></svg></span>
+      <span class="hb" style="--i:1"><svg viewBox="0 0 64 64"><rect x="4" y="4" width="56" height="56" rx="18" fill="#FFC93C"/></svg></span>
+      <span class="hb" style="--i:2"><svg viewBox="0 0 64 64"><path d="M28 12 Q32 5 36 12 L58 50 Q61 58 52 58 L12 58 Q3 58 6 50 Z" fill="#FF6A3D"/></svg></span>
+      <span class="hb" style="--i:3"><svg viewBox="0 0 64 64"><path d="M4 60 A56 56 0 0 1 60 4 L60 50 Q60 60 50 60 Z" fill="#E8368F"/></svg></span>
+    </div>
+    <div style="display:grid;gap:20px">
+      <p class="eyebrow">Impresión 3D · Encarnación</p>
+      <h1>Tu nombre, tu logo, tu idea. <span>En 3D.</span></h1>
+      <p class="lead">Objetos impresos capa por capa, hechos solo para vos. Envíos a todo el Paraguay.</p>
+      <div class="cta">
+        <a class="btn btn-ink" href="#catalogo">Ver productos</a>
+        <a class="btn btn-wa" id="heroWa" href="#" target="_blank" rel="noopener">Escribinos por WhatsApp</a>
+      </div>
+      <div class="trust"><span>Piezas únicas</span><span>Factura legal con RUC</span><span>Envíos a todo el país</span></div>
+    </div>
+  </section>
+
+  <section class="band band-col" id="coleccion" aria-labelledby="colTitle" hidden></section>
+
+  <section aria-labelledby="catTitle">
+    <div class="cat-head" id="catalogo">
+      <h2 id="catTitle">Elegí tu pieza</h2>
+      <div class="chips" id="chips" role="group" aria-label="Filtrar por línea"></div>
+      <p class="line-intro" id="lineIntro"></p>
+    </div>
+    <div class="grid" id="grid" style="margin-top:16px"></div>
+  </section>
+
+  <section class="how" id="como" aria-labelledby="howTitle">
+    <h2 id="howTitle">Cómo pedir</h2>
+    <ol class="steps">
+      <li><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="#2F55E8"/></svg><div><h3>Elegí la pieza</h3><p>Mirá las cuatro líneas o contanos una idea propia.</p></div></li>
+      <li><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="4" width="56" height="56" rx="18" fill="#FFC93C"/></svg><div><h3>Personalizala</h3><p>Color, nombre o tu logo. Te mostramos el diseño antes de imprimir.</p></div></li>
+      <li><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M4 60 A56 56 0 0 1 60 4 L60 50 Q60 60 50 60 Z" fill="#E8368F"/></svg><div><h3>Pedí por WhatsApp</h3><p>Confirmamos precio, plazo y envío. Seña del 50% al aprobar el diseño.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="band band-b2b" id="empresas" aria-labelledby="b2bTitle">
+    <span class="deco" aria-hidden="true"></span>
+    <p class="eyebrow">formelia mba’apo · para negocios</p>
+    <h2 id="b2bTitle">Regalos con el logo de tu negocio</h2>
+    <ul><li>Desde 20 unidades</li><li>Factura legal con RUC</li><li>Aprobás el diseño antes de imprimir</li></ul>
+    <a class="btn btn-light" id="b2bWa" href="#" target="_blank" rel="noopener">Pedir presupuesto</a>
+  </section>
+
+
+  <section class="faq" id="preguntas" aria-labelledby="faqTitle">
+    <h2 id="faqTitle">Preguntas frecuentes</h2>
+    <details><summary>¿Hacen envíos?</summary><p>Sí. Imprimimos en Encarnación y enviamos a todo el Paraguay.</p></details>
+    <details><summary>¿Cuánto tarda mi pedido?</summary><p>Entre 5 y 10 días, según la pieza y la cantidad. Te confirmamos el plazo por WhatsApp.</p></details>
+    <details><summary>¿Cómo se paga?</summary><p>Con una seña del 50% cuando aprobás el diseño.</p></details>
+    <details><summary>¿Emiten factura?</summary><p>Sí, factura legal con RUC, también para pedidos de empresas.</p></details>
+    <details><summary>¿Puedo pedir algo que no está acá?</summary><p>Claro. Contanos tu idea por WhatsApp y te decimos si se puede imprimir.</p></details>
+  </section>
+
+  <footer>
+    <span class="brand"><svg width="30" height="30" viewBox="0 0 128 128" aria-hidden="true"><circle cx="34" cy="34" r="28" fill="#2F55E8"/><rect x="68" y="6" width="56" height="56" rx="18" fill="#FFC93C"/><path d="M30 76 Q34 69 38 76 L60 114 Q63 122 54 122 L14 122 Q5 122 8 114 Z" fill="#FF6A3D"/><path d="M68 122 A56 56 0 0 1 124 66 L124 112 Q124 122 114 122 Z" fill="#E8368F"/></svg><b>formelia</b></span>
+    <p>Hecho en Encarnación, capa por capa.</p>
+    <p>Instagram: @formelia.3d.py</p><p>WhatsApp: <span style="white-space:nowrap">0975 113 793</span></p>
+  </footer>
+</main>
+
+<div class="wrap page-about" id="pageAbout" hidden>
+  <button class="back" type="button" id="aboutBack">← Volver a la tienda</button>
+  <section class="about" id="nosotras" aria-labelledby="aboutTitle">
+    <div class="about-photo">
+      <svg class="stk stk-a" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="#2F55E8"/></svg>
+      <svg class="stk stk-b" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 60 A56 56 0 0 1 60 4 L60 50 Q60 60 50 60 Z" fill="#E8368F"/></svg>
+      <!-- Foto de las creadoras: reemplazar este bloque por <img src="..." alt="[NOMBRE] y [NOMBRE], creadoras de Formelia"> -->
+      <div><b>Foto de las creadoras</b><small>[FOTO]</small></div>
+    </div>
+    <div class="about-text">
+      <p class="eyebrow">Quiénes somos</p>
+      <h2 id="aboutTitle">Detrás de cada pieza, estamos nosotras</h2>
+      <p>Somos [NOMBRE] y [NOMBRE], las creadoras de Formelia. Nos encanta convertir una idea en algo que se puede tocar, regalar y guardar.</p>
+      <p>Cada pieza la diseñamos e imprimimos nosotras mismas en Encarnación, capa por capa, pensando en quien la va a recibir.</p>
+      <p class="about-sign">Con cariño, [NOMBRE] y [NOMBRE]</p>
+      <div class="cta"><a class="btn btn-ink" href="#catalogo">Ver productos</a><a class="btn btn-wa" id="aboutWa" href="#" target="_blank" rel="noopener">Escribinos por WhatsApp</a></div>
+    </div>
+  </section>
+
+  <section class="about-video-wrap" aria-labelledby="vidTitle">
+    <h2 id="vidTitle" class="vid-title">Conocenos en video</h2>
+    <div class="vid-frame">
+      <svg class="vd vd-a" viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="4" width="56" height="56" rx="18" fill="#FFC93C"/></svg>
+      <svg class="vd vd-b" viewBox="0 0 64 64" aria-hidden="true"><path d="M28 12 Q32 5 36 12 L58 50 Q61 58 52 58 L12 58 Q3 58 6 50 Z" fill="#FF6A3D"/></svg>
+      <video id="aboutVideo" src="formelia-video.mp4" poster="formelia-video-poster.jpg" controls playsinline preload="metadata" aria-label="Video de presentación de Formelia"></video>
+    </div>
+    <a class="vid-ig" href="https://www.instagram.com/p/DfkzP-hSVLX/" target="_blank" rel="noopener">Verlo también en Instagram →</a>
+  </section>
+</div>
+
+<div class="float" id="float" hidden><button type="button" id="floatBtn"><span>Ver pedido · <span id="floatN">0</span></span><b id="floatT">Gs. 0</b></button></div>
+
+<dialog class="sheet" id="sheet" aria-labelledby="pName">
+  <div class="sheet-in" id="sheetIn"></div>
+</dialog>
+<dialog class="sheet" id="bag" aria-labelledby="bagTitle">
+  <div class="sheet-in" id="bagIn"></div>
+</dialog>
+
+<script>
+/* Visor 3D: carga three.js solo al abrir un producto. Modelos simples hechos en código; después se reemplazan por los archivos reales de impresión (STL → GLB). */
+window.F3D = (function () {
+  var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+  var ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+  var loading = null, R, scene, camera, controls, group, shadow, layerTex, raf = 0, resumeT = 0, lastKind = '', ro = null, host = null, onTouch = null;
+  function load(src) { return new Promise(function (res, rej) { var s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+  function ready() { if (!loading) loading = load(THREE_URL).then(function () { return load(ORBIT_URL); }).then(init); return loading; }
+  function init() {
+    R = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    R.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    R.outputEncoding = THREE.sRGBEncoding;
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xe6d6c6, 0.8));
+    var d = new THREE.DirectionalLight(0xffffff, 0.85); d.position.set(3, 6, 5); scene.add(d);
+    var d2 = new THREE.DirectionalLight(0xffffff, 0.35); d2.position.set(-5, 2, -4); scene.add(d2);
+    controls = new THREE.OrbitControls(camera, R.domElement);
+    controls.enablePan = false; controls.enableDamping = true; controls.dampingFactor = 0.08;
+    controls.autoRotate = !matchMedia('(prefers-reduced-motion: reduce)').matches; controls.autoRotateSpeed = 2.4;
+    controls.minPolarAngle = 0.35; controls.maxPolarAngle = 1.8;
+    controls.addEventListener('start', function () { controls.autoRotate = false; clearTimeout(resumeT); if (onTouch) onTouch(); });
+    controls.addEventListener('end', function () { resumeT = setTimeout(function () { controls.autoRotate = !matchMedia('(prefers-reduced-motion: reduce)').matches; }, 3500); });
+    var c = document.createElement('canvas'); c.width = 4; c.height = 16; var x = c.getContext('2d');
+    x.fillStyle = '#fff'; x.fillRect(0, 0, 4, 16); x.fillStyle = '#9a9a9a'; x.fillRect(0, 11, 4, 5);
+    layerTex = new THREE.CanvasTexture(c); layerTex.wrapS = layerTex.wrapT = THREE.RepeatWrapping;
+    var sc = document.createElement('canvas'); sc.width = sc.height = 128; var g = sc.getContext('2d');
+    var gr = g.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(23,24,58,.32)'); gr.addColorStop(1, 'rgba(23,24,58,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+    shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sc), transparent: true, depthWrite: false }));
+    shadow.rotation.x = -Math.PI / 2; scene.add(shadow);
+  }
+  function lin(hex) { return new THREE.Color(hex).convertSRGBToLinear(); }
+  function mat(hex, rep) { var t = layerTex.clone(); t.needsUpdate = true; t.repeat.set(1, rep || 9); return new THREE.MeshStandardMaterial({ color: lin(hex), roughness: 0.62, metalness: 0, bumpMap: t, bumpScale: 0.014, side: THREE.DoubleSide }); }
+  function plain(hex, opt) { var o = { color: lin(hex), roughness: 0.5, metalness: 0 }; for (var k in opt) o[k] = opt[k]; return new THREE.MeshStandardMaterial(o); }
+  function M(geo, m) { return new THREE.Mesh(geo, m); }
+  function rr(w, h, r) { var s = new THREE.Shape(), x = -w / 2, y = -h / 2; s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r); s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h); s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r); s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s; }
+  function ext(shape, depth) { var g = new THREE.ExtrudeGeometry(shape, { depth: depth, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 3, curveSegments: 24 }); g.translate(0, 0, -depth / 2); return g; }
+  function tex(text, color, w, h, stroke) {
+    var W = 1024, H = Math.max(64, Math.round(1024 * h / w)), c = document.createElement('canvas'); c.width = W; c.height = H;
+    var x = c.getContext('2d'), size = Math.min(H * 0.8, W / (Math.max(text.length, 1) * 0.6));
+    x.font = '600 ' + size + 'px Lexend, "DM Sans", sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+    if (stroke) { x.lineWidth = size * 0.09; x.lineJoin = 'round'; x.strokeStyle = stroke; x.strokeText(text, W / 2, H / 2 + size * 0.05); }
+    x.fillStyle = color; x.fillText(text, W / 2, H / 2 + size * 0.05);
+    var t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = 4; return t;
+  }
+  function decal(geo, text, color, w, h) { return M(geo, new THREE.MeshStandardMaterial({ map: tex(text, color, w, h), transparent: true, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2, side: THREE.DoubleSide })); }
+  function flat(text, color, w, h) { return decal(new THREE.PlaneGeometry(w, h), text, color, w, h); }
+  function at(o, x, y, z) { o.position.set(x, y, z); return o; }
+  var DARK = '#17183A';
+
+  function build(kind, hex, ink, text) {
+    var G = new THREE.Group(), m;
+    switch (kind) {
+      case 'keychain':
+        var s = rr(3, 3, 0.9), hole = new THREE.Path(); hole.absarc(0, 1.0, 0.3, 0, Math.PI * 2, true); s.holes.push(hole);
+        G.add(M(ext(s, 0.35), mat(hex)));
+        m = M(new THREE.TorusGeometry(0.55, 0.08, 16, 48), plain('#B9BCC7', { metalness: 0.85, roughness: 0.28 })); m.rotation.y = Math.PI / 2; G.add(at(m, 0, 1.55, 0));
+        if (text) G.add(at(flat(text, ink, 2.6, 0.95), 0, -0.35, 0.231));
+        break;
+      case 'magnet':
+        var b = new THREE.Shape(); b.moveTo(0, 1.3); b.bezierCurveTo(1.7, 1.3, 2.0, 0.2, 1.4, -0.8); b.bezierCurveTo(0.9, -1.6, -0.9, -1.5, -1.4, -0.9); b.bezierCurveTo(-1.9, -0.2, -1.5, 1.3, 0, 1.3);
+        G.add(M(ext(b, 0.3), mat(hex)));
+        if (text) G.add(at(flat(text, ink, 2.5, 0.95), 0, 0, 0.206));
+        break;
+      case 'stand':
+        G.add(at(M(new THREE.BoxGeometry(2.4, 0.3, 2.0), mat(hex, 3)), 0, 0.15, 0));
+        m = M(new THREE.BoxGeometry(2.4, 2.6, 0.25), mat(hex, 26)); m.rotation.x = -0.3; G.add(at(m, 0, 1.45, -0.6));
+        G.add(at(M(new THREE.BoxGeometry(2.4, 0.55, 0.22), mat(hex, 5)), 0, 0.55, 0.85));
+        m = M(new THREE.BoxGeometry(1.3, 2.6, 0.12), plain(DARK, { roughness: 0.25 })); m.rotation.x = -0.3; G.add(at(m, 0, 1.75, -0.32));
+        if (text) G.add(at(flat(text, ink, 2.2, 0.48), 0, 0.55, 0.965));
+        break;
+      case 'vase':
+        var rAt = function (y) { return 0.9 + 0.14 * Math.sin(y * 5) + y * 0.12; }, pts = [new THREE.Vector2(0, 0)], i, y;
+        for (i = 0; i <= 40; i++) { y = i / 40 * 2.6; pts.push(new THREE.Vector2(rAt(y), y)); }
+        for (i = 40; i >= 4; i--) { y = i / 40 * 2.6; pts.push(new THREE.Vector2(rAt(y) - 0.1, y)); }
+        pts.push(new THREE.Vector2(0, 0.26));
+        G.add(M(new THREE.LatheGeometry(pts, 72), mat(hex, 34)));
+        [[-0.3, 0.4, -0.5], [0.3, 0.4, 0.5], [0, 0.55, 0], [0.1, 0.35, -1.4]].forEach(function (l, k) {
+          var e = M(new THREE.SphereGeometry(0.22, 16, 12), plain(k === 2 ? '#2F55E8' : DARK)); e.scale.set(1, 2.6, 0.7); e.rotation.z = l[2]; e.rotation.y = k * 1.3; G.add(at(e, l[0], 2.6 + l[1], 0));
+        });
+        if (text) { var rv = rAt(1.15) + 0.03; G.add(at(decal(new THREE.CylinderGeometry(rv, rv, 0.5, 32, 1, true, -0.65, 1.3), text, ink, rv * 1.3, 0.5), 0, 1.15, 0)); }
+        break;
+      case 'candle':
+        G.add(M(new THREE.LatheGeometry([new THREE.Vector2(0, 0), new THREE.Vector2(1.0, 0), new THREE.Vector2(1.05, 0.08), new THREE.Vector2(1.05, 1.2), new THREE.Vector2(0.93, 1.25), new THREE.Vector2(0.9, 0.25), new THREE.Vector2(0, 0.25)], 64), mat(hex, 16)));
+        G.add(at(M(new THREE.CylinderGeometry(0.72, 0.72, 0.55, 40), plain('#FFF3E8')), 0, 0.52, 0));
+        G.add(at(M(new THREE.CylinderGeometry(0.025, 0.025, 0.18, 8), plain(DARK)), 0, 0.88, 0));
+        m = M(new THREE.SphereGeometry(0.12, 16, 12), new THREE.MeshBasicMaterial({ color: lin(hex === '#FFC93C' ? '#FF6A3D' : '#FFC93C') })); m.scale.set(1, 2.1, 1); G.add(at(m, 0, 1.18, 0));
+        if (text) G.add(at(decal(new THREE.CylinderGeometry(1.07, 1.07, 0.45, 32, 1, true, -0.7, 1.4), text, ink, 1.5, 0.45), 0, 0.7, 0));
+        break;
+      case 'organizer':
+        [[-1.0, 2.2], [0, 2.8], [1.0, 1.7]].forEach(function (c) { G.add(at(M(new THREE.BoxGeometry(0.95, c[1], 1.2), mat(hex, Math.round(c[1] * 9))), c[0], c[1] / 2, 0)); });
+        [['#FF6A3D', -0.15, 0.2], ['#E8368F', 0.12, -0.15], ['#FFC93C', -1.05, 0.1]].forEach(function (p, k) {
+          var pe = M(new THREE.CylinderGeometry(0.06, 0.06, 1.4, 10), plain(p[0])); pe.rotation.z = p[2]; G.add(at(pe, p[1], k === 2 ? 2.4 : 3.0, 0.1));
+        });
+        if (text) G.add(at(flat(text, ink, 2.8, 0.62), 0, 0.6, 0.605));
+        break;
+      case 'nails':
+        G.add(at(M(new THREE.BoxGeometry(3.6, 0.7, 1.3), mat(hex, 6)), 0, 0.35, 0));
+        ['#E8368F', '#FF6A3D', '#FFC93C', '#2F55E8', '#17183A'].forEach(function (bc, k) {
+          var bx = -1.36 + k * 0.68;
+          G.add(at(M(new THREE.CylinderGeometry(0.22, 0.24, 0.75, 24), plain(bc, { roughness: 0.15 })), bx, 1.075, 0));
+          G.add(at(M(new THREE.CylinderGeometry(0.1, 0.1, 0.4, 16), plain(DARK)), bx, 1.65, 0));
+        });
+        G.add(at(flat('TU LOGO', ink, 3.0, 0.5), 0, 0.35, 0.656));
+        break;
+      case 'display':
+        G.add(at(M(ext(rr(2.6, 3.2, 0.45), 0.25), mat(hex)), 0, 2.0, 0));
+        G.add(at(M(new THREE.BoxGeometry(3, 0.3, 1.1), plain(DARK)), 0, 0.15, 0));
+        G.add(at(flat('TU LOGO', ink, 2.2, 0.8), 0, 2.0, 0.181));
+        break;
+      case 'ornament':
+        G.add(M(new THREE.SphereGeometry(1.4, 64, 32), mat(hex, 30)));
+        G.add(at(M(new THREE.CylinderGeometry(0.32, 0.32, 0.35, 24), plain('#C9A227', { metalness: 0.7, roughness: 0.3 })), 0, 1.47, 0));
+        G.add(at(M(new THREE.TorusGeometry(0.18, 0.05, 12, 32), plain('#C9A227', { metalness: 0.7, roughness: 0.3 })), 0, 1.8, 0));
+        if (text) G.add(decal(new THREE.SphereGeometry(1.43, 48, 16, Math.PI / 2 - 0.7, 1.4, Math.PI / 2 - 0.2, 0.5), text, ink, 2.0, 0.72));
+        break;
+      case 'topper':
+        var light = hex === '#FFC93C' || hex === '#FFFFFF', strokeC = light ? DARK : null, nm = text || 'Nombre';
+        var t1 = tex(nm, hex, 3.6, 1.2, strokeC), t2 = tex('¡Feliz cumple!', hex, 3.0, 0.6, strokeC);
+        for (var k = 0; k < 6; k++) {
+          var shade = k ? 0.78 : 1, z = -k * 0.02;
+          var m1 = new THREE.MeshStandardMaterial({ map: t1, alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.6, color: new THREE.Color(shade, shade, shade) });
+          var m2 = new THREE.MeshStandardMaterial({ map: t2, alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.6, color: new THREE.Color(shade, shade, shade) });
+          G.add(at(M(new THREE.PlaneGeometry(3.6, 1.2), m1), 0, 0.35, z));
+          G.add(at(M(new THREE.PlaneGeometry(3.0, 0.6), m2), 0, 1.2, z));
+        }
+        G.add(at(M(new THREE.BoxGeometry(2.4, 0.12, 0.1), plain(hex)), 0, -0.3, -0.05));
+        G.add(at(M(new THREE.CylinderGeometry(0.05, 0.05, 2.0, 10), plain(DARK)), -0.8, -1.3, -0.05));
+        G.add(at(M(new THREE.CylinderGeometry(0.05, 0.05, 2.0, 10), plain(DARK)), 0.8, -1.3, -0.05));
+        break;
+      case 'star':
+        var st = new THREE.Shape();
+        for (var j = 0; j < 10; j++) { var a = Math.PI / 2 + j * Math.PI / 5, rr2 = j % 2 ? 0.8 : 1.75, px = Math.cos(a) * rr2, py = Math.sin(a) * rr2; if (j) st.lineTo(px, py); else st.moveTo(px, py); }
+        st.closePath();
+        G.add(M(ext(st, 0.35), mat(hex)));
+        G.add(at(M(new THREE.CylinderGeometry(0.16, 0.16, 0.6, 16), plain(DARK)), 0, -1.75, 0));
+        if (text) G.add(at(flat(text, ink, 1.4, 0.5), 0, -0.1, 0.231));
+        break;
+    }
+    return G;
+  }
+  function dispose(o) { o.traverse(function (n) { if (n.geometry) n.geometry.dispose(); if (n.material) { if (n.material.map) n.material.map.dispose(); if (n.material.bumpMap) n.material.bumpMap.dispose(); n.material.dispose(); } }); }
+  function fitCamera(reset) {
+    var box = new THREE.Box3().setFromObject(group), c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
+    group.position.sub(c);
+    shadow.position.set(0, -size.y / 2 - 0.02, 0); shadow.scale.set(size.x * 1.5 + 0.5, size.z * 1.5 + 1, 1);
+    var rad = size.length() / 2, dist = rad / Math.sin(camera.fov * Math.PI / 360) * 1.05;
+    controls.minDistance = dist * 0.6; controls.maxDistance = dist * 1.7;
+    if (reset) { camera.position.set(0.3, 0.2, 1).normalize().multiplyScalar(dist); controls.target.set(0, 0, 0); controls.update(); }
+  }
+  function resize() { if (!host) return; var w = host.clientWidth, h = host.clientHeight; if (!w || !h) return; R.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+  function loop() { raf = requestAnimationFrame(loop); controls.update(); R.render(scene, camera); }
+  return {
+    mount: function (el, touched) {
+      return ready().then(function () {
+        host = el; onTouch = touched; el.appendChild(R.domElement); lastKind = '';
+        if (ro) ro.disconnect(); if (window.ResizeObserver) { ro = new ResizeObserver(resize); ro.observe(el); }
+        resize(); cancelAnimationFrame(raf); loop();
+      });
+    },
+    show: function (kind, hex, ink, text) {
+      if (!R) return;
+      if (group) { scene.remove(group); dispose(group); }
+      group = build(kind, hex, ink, text); scene.add(group);
+      fitCamera(kind !== lastKind); lastKind = kind;
+    },
+    stop: function () { cancelAnimationFrame(raf); if (ro) ro.disconnect(); host = null; },
+    isReady: function () { return !!R; }
+  };
+})();
+</script>
+<script>
+(function () {
+  // Número de WhatsApp en formato internacional sin "+" (ej. 595981123456). Vacío = WhatsApp pide elegir el contacto.
+  var WPP = '595975113793';
+
+  var COLORS = [
+    { id: 'cobalto', name: 'Cobalto', hex: '#2F55E8' },
+    { id: 'sol', name: 'Sol', hex: '#FFC93C' },
+    { id: 'tangerina', name: 'Tangerina', hex: '#FF6A3D' },
+    { id: 'pitaya', name: 'Pitaya', hex: '#E8368F' },
+    { id: 'marino', name: 'Marino', hex: '#17183A' },
+    { id: 'blanco', name: 'Blanco', hex: '#FFFFFF' }
+  ];
+  var LINES = {
+    mbaei: { name: 'mba’e’i', gloss: 'cosita', c: '#E8368F', tc: '#C42675', on: '#FFFFFF', intro: 'Mimos y recuerditos para regalar.' },
+    oga: { name: 'óga', gloss: 'casa', c: '#FFC93C', tc: '#8A6200', on: '#17183A', intro: 'Piezas para tu casa, con tu toque.' },
+    mbaapo: { name: 'mba’apo', gloss: 'trabajo', c: '#2F55E8', tc: '#2F55E8', on: '#FFFFFF', intro: 'Regalos con el logo de tu negocio. Pedido mínimo por pieza.' },
+    arete: { name: 'arete', gloss: 'fiesta', c: '#FF6A3D', tc: '#C2410C', on: '#17183A', intro: 'Navidad, cumpleaños y fechas especiales.' }
+  };
+  var P = [
+    { id: 'llavero', line: 'mbaei', name: 'Llavero con nombre', price: 25000, art: 'keychain', color: 'pitaya', text: 'Ana', max: 10, desc: 'Tu nombre, el de tu mascota o una palabra corta, en relieve. Liviano y resistente para llevar todos los días.', meta: ['6 × 6 cm', 'Hasta 10 letras'] },
+    { id: 'iman', line: 'mbaei', name: 'Imán personalizado', price: 20000, art: 'magnet', color: 'sol', text: 'Sol', max: 8, desc: 'Un imán para la heladera con un nombre o una palabra que te guste. Ideal como recuerdito de cumpleaños.', meta: ['5 cm', 'Imán incluido'] },
+    { id: 'soporte', line: 'mbaei', name: 'Soporte de celular', price: 45000, art: 'stand', color: 'cobalto', text: 'Leo', max: 10, desc: 'Sostiene tu celular en el escritorio o la mesa de luz, con tu nombre en la base.', meta: ['Para cualquier celular'] },
+    { id: 'maceta', line: 'oga', name: 'Maceta Ondas', price: 65000, art: 'vase', color: 'sol', text: '', max: 8, desc: 'Maceta con forma de ondas, pensada para suculentas y cactus. Si querés, le sumamos un nombre.', meta: ['12 cm de alto', 'Con drenaje'] },
+    { id: 'portavelas', line: 'oga', name: 'Portavelas', price: 40000, art: 'candle', color: 'tangerina', text: '', max: 8, desc: 'Portavelas para velas de té, en el color que combine con tu casa.', meta: ['Para velas de té'] },
+    { id: 'organizador', line: 'oga', name: 'Organizador de escritorio', price: 55000, art: 'organizer', color: 'cobalto', text: 'Mati', max: 10, desc: 'Tres compartimentos para lápices, tijeras y cositas del escritorio, con tu nombre al frente.', meta: ['3 compartimentos'] },
+    { id: 'portaesmaltes', line: 'mbaapo', name: 'Porta esmaltes con tu logo', price: 35000, min: 20, art: 'nails', color: 'blanco', logo: true, desc: 'Organizador de esmaltes con el logo de tu salón o estudio. Un regalo útil para tus clientas que lleva tu marca.', meta: ['Desde 20 unidades', '5 a 10 días'] },
+    { id: 'display', line: 'mbaapo', name: 'Display de mostrador', price: 90000, min: 10, art: 'display', color: 'cobalto', logo: true, desc: 'Cartel de mostrador con tu logo, para la caja, la vidriera o la recepción.', meta: ['Desde 10 unidades', '7 a 12 días'] },
+    { id: 'llavero-logo', line: 'mbaapo', name: 'Llavero con tu logo', price: 18000, min: 20, art: 'keychain', color: 'marino', logo: true, desc: 'Llaveros con tu marca para regalar a clientes o entregar en eventos.', meta: ['Desde 20 unidades', '5 a 10 días'] },
+    { id: 'bolita', line: 'arete', name: 'Bolita de Navidad con nombre', price: 22000, art: 'ornament', color: 'tangerina', text: 'Sofía', max: 8, desc: 'Una bolita para el arbolito con el nombre de cada uno de la familia.', meta: ['8 cm', 'Con cinta'] },
+    { id: 'topper', line: 'arete', name: 'Topper de torta', price: 35000, art: 'topper', color: 'pitaya', text: 'Lucas', max: 10, desc: 'Topper para la torta con el nombre del cumpleañero.', meta: ['15 cm de ancho'] },
+    { id: 'estrella', line: 'arete', name: 'Estrella para el árbol', price: 30000, art: 'star', color: 'sol', text: 'Familia', max: 10, desc: 'Estrella para la punta del arbolito, con el apellido de la familia.', meta: ['12 cm'] }
+  ];
+  /* ============================================================
+     COLECCIÓN DEL MOMENTO — cambiar esto cada mes.
+     activa: false la oculta. productos: ids de la lista P de arriba.
+     ============================================================ */
+  var COLECCION = {
+    activa: true,
+    etiqueta: 'Colección de diciembre',
+    chip: 'Navidad',
+    titulo: 'Navidad con tu nombre',
+    texto: 'Adornos personalizados para el arbolito y para regalar. Pedidos hasta el [FECHA].',
+    color: '#FF6A3D',
+    tinta: '#17183A',
+    productos: ['bolita', 'estrella', 'topper'],
+    boton: 'Ver la colección',
+    deco: '<svg class="deco" viewBox="0 0 120 150" aria-hidden="true"><circle cx="60" cy="12" r="10" fill="#FFC93C"/><path d="M52 30 Q60 18 68 30 L104 86 Q110 96 98 96 L22 96 Q10 96 16 86 Z" fill="#FFF3E8"/><rect x="48" y="98" width="24" height="26" rx="6" fill="#17183A"/><circle cx="46" cy="70" r="7" fill="#2F55E8"/><circle cx="74" cy="58" r="6" fill="#E8368F"/><circle cx="70" cy="84" r="6" fill="#2F55E8"/></svg>'
+  };
+
+  var byId = {}; P.forEach(function (p) { byId[p.id] = p; });
+  function col(id) { for (var i = 0; i < COLORS.length; i++) if (COLORS[i].id === id) return COLORS[i]; return COLORS[0]; }
+  function inkOn(hex) { return (hex === '#FFC93C' || hex === '#FFFFFF') ? '#17183A' : '#FFFFFF'; }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function gs(n) { return 'Gs. ' + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function wa(msg) { return 'https://wa.me/' + WPP + '?text=' + encodeURIComponent(msg); }
+
+  function T(t, x, y, size, fill, extra) {
+    return '<text x="' + x + '" y="' + y + '" text-anchor="middle" dominant-baseline="central" font-family="Lexend, DM Sans, sans-serif" font-weight="600" font-size="' + size.toFixed(1) + '" fill="' + fill + '"' + (extra || '') + '>' + esc(t) + '</text>';
+  }
+  function fit(t, max, w) { return Math.min(max, w / (Math.max(t.length, 1) * 0.6)); }
+  function star(cx, cy, R, r) { var s = ''; for (var i = 0; i < 10; i++) { var a = -Math.PI / 2 + i * Math.PI / 5, d = i % 2 ? r : R; s += (cx + Math.cos(a) * d).toFixed(1) + ',' + (cy + Math.sin(a) * d).toFixed(1) + ' '; } return s; }
+
+  function art(kind, hex, t) {
+    var ink = inkOn(hex), edge = hex === '#FFFFFF' ? ' stroke="rgba(23,24,58,.18)" stroke-width="2"' : '', s = '';
+    t = t || '';
+    switch (kind) {
+      case 'keychain':
+        s = '<circle cx="100" cy="40" r="20" fill="none" stroke="#17183A" stroke-width="7"/>' +
+          '<rect x="38" y="52" width="124" height="124" rx="36" fill="' + hex + '"' + edge + '/>' +
+          '<circle cx="100" cy="68" r="9" fill="#FFF3E8"/>' + (t ? T(t, 100, 124, fit(t, 40, 104), ink) : ''); break;
+      case 'magnet':
+        s = '<path d="M100 36 C152 36 172 70 166 106 C160 152 124 168 94 162 C52 156 32 126 38 94 C44 58 66 36 100 36Z" fill="' + hex + '"' + edge + '/>' + (t ? T(t, 100, 102, fit(t, 40, 104), ink) : ''); break;
+      case 'stand':
+        s = '<path d="M80 152 L98 62 Q100 54 108 54 L114 54 Q120 54 118 62 L104 152 Z" fill="' + hex + '"' + edge + '/>' +
+          '<g transform="rotate(12 122 92)"><rect x="94" y="38" width="58" height="108" rx="12" fill="#17183A"/><rect x="100" y="46" width="46" height="88" rx="7" fill="#2F55E8" opacity=".45"/></g>' +
+          '<rect x="30" y="148" width="140" height="28" rx="11" fill="' + hex + '"' + edge + '/>' + (t ? T(t, 100, 162, fit(t, 20, 120), ink) : ''); break;
+      case 'vase':
+        s = '<ellipse cx="86" cy="44" rx="10" ry="24" fill="#17183A" transform="rotate(-28 86 44)"/><ellipse cx="114" cy="44" rx="10" ry="24" fill="#17183A" transform="rotate(28 114 44)"/><ellipse cx="100" cy="38" rx="10" ry="26" fill="#2F55E8"/>' +
+          '<path d="M60 66 H140 Q128 88 136 108 Q152 134 140 158 Q131 176 146 186 H54 Q69 176 60 158 Q48 134 64 108 Q72 88 60 66 Z" fill="' + hex + '"' + edge + '/>' +
+          '<path d="M66 100 Q100 110 134 100" stroke="' + ink + '" stroke-opacity=".18" stroke-width="5" fill="none"/>' + (t ? T(t, 100, 138, fit(t, 26, 72), ink) : ''); break;
+      case 'candle':
+        var fl = hex === '#FFC93C' ? '#FF6A3D' : '#FFC93C';
+        s = '<path d="M100 26 Q116 46 100 64 Q84 46 100 26Z" fill="' + fl + '"/><rect x="98" y="58" width="4" height="10" fill="#17183A"/>' +
+          '<rect x="76" y="66" width="48" height="22" rx="6" fill="#FFF3E8" stroke="rgba(23,24,58,.15)" stroke-width="2"/>' +
+          '<rect x="54" y="80" width="92" height="98" rx="18" fill="' + hex + '"' + edge + '/>' +
+          '<circle cx="78" cy="112" r="7" fill="#FFF3E8" opacity=".75"/><circle cx="100" cy="104" r="7" fill="#FFF3E8" opacity=".75"/><circle cx="122" cy="112" r="7" fill="#FFF3E8" opacity=".75"/>' +
+          (t ? T(t, 100, 150, fit(t, 24, 78), ink) : ''); break;
+      case 'organizer':
+        s = '<rect x="60" y="38" width="6" height="56" rx="3" fill="#FF6A3D" transform="rotate(-10 63 66)"/><rect x="74" y="30" width="6" height="64" rx="3" fill="#E8368F" transform="rotate(6 77 62)"/><rect x="104" y="40" width="5" height="40" rx="2" fill="#17183A"/><rect x="146" y="56" width="6" height="50" rx="3" fill="#FFC93C"/>' +
+          '<rect x="30" y="86" width="46" height="92" rx="10" fill="' + hex + '"' + edge + '/><rect x="78" y="70" width="46" height="108" rx="10" fill="' + hex + '"' + edge + '/><rect x="126" y="102" width="46" height="76" rx="10" fill="' + hex + '"' + edge + '/>' +
+          (t ? T(t, 100, 152, fit(t, 28, 130), ink) : ''); break;
+      case 'nails':
+        var bc = ['#E8368F', '#FF6A3D', '#FFC93C', '#2F55E8', '#17183A'], b = '';
+        for (var i = 0; i < 5; i++) { var x = 40 + i * 26; b += '<rect x="' + (x + 5) + '" y="70" width="10" height="22" rx="3" fill="#17183A"/><rect x="' + x + '" y="90" width="20" height="38" rx="6" fill="' + bc[i] + '"/>'; }
+        s = b + '<rect x="24" y="120" width="152" height="56" rx="14" fill="' + hex + '"' + edge + '/>' + T('TU LOGO', 100, 148, 20, ink, ' letter-spacing="2"'); break;
+      case 'display':
+        s = '<rect x="46" y="30" width="108" height="128" rx="20" fill="' + hex + '"' + edge + '/><rect x="34" y="156" width="132" height="20" rx="9" fill="#17183A"/>' +
+          '<rect x="66" y="66" width="68" height="44" rx="10" fill="none" stroke="' + ink + '" stroke-width="3" stroke-dasharray="6 5"/>' + T('TU LOGO', 100, 130, 17, ink, ' letter-spacing="2"'); break;
+      case 'ornament':
+        s = '<circle cx="100" cy="28" r="10" fill="none" stroke="#17183A" stroke-width="5"/><rect x="86" y="36" width="28" height="18" rx="4" fill="#17183A"/>' +
+          '<circle cx="100" cy="116" r="64" fill="' + hex + '"' + edge + '/><path d="M40 96 Q100 116 160 96" stroke="' + ink + '" stroke-opacity=".22" stroke-width="6" fill="none"/>' +
+          (t ? T(t, 100, 134, fit(t, 32, 100), ink) : ''); break;
+      case 'topper':
+        var light = hex === '#FFC93C' || hex === '#FFFFFF', st = light ? ' stroke="#17183A" stroke-width="2" paint-order="stroke"' : '';
+        s = '<rect x="66" y="118" width="6" height="66" rx="3" fill="#17183A"/><rect x="128" y="118" width="6" height="66" rx="3" fill="#17183A"/>' +
+          T('¡Feliz cumple!', 100, 62, 22, hex, st) + T(t || 'Nombre', 100, 100, fit(t || 'Nombre', 46, 160), hex, st) +
+          '<rect x="52" y="116" width="96" height="8" rx="4" fill="' + hex + '"' + (light ? ' stroke="#17183A" stroke-width="2"' : '') + '/>'; break;
+      case 'star':
+        s = '<polygon points="' + star(100, 104, 82, 38) + '" fill="' + hex + '"' + edge + ' stroke-linejoin="round"/><rect x="94" y="180" width="12" height="14" rx="4" fill="#17183A"/>' +
+          (t ? T(t, 100, 110, fit(t, 22, 66), ink) : ''); break;
+    }
+    return '<svg viewBox="0 0 200 200" role="img" aria-hidden="true">' + s + '</svg>';
+  }
+
+  /* bag (per-viewer, survives reloads when the browser allows) */
+  var bag = [];
+  try { bag = JSON.parse(localStorage.getItem('formelia-bolsa') || '[]') || []; } catch (e) { bag = []; }
+  bag = bag.filter(function (it) { return byId[it.id]; });
+  function save() { try { localStorage.setItem('formelia-bolsa', JSON.stringify(bag)); } catch (e) {} }
+  function bagTotal() { return bag.reduce(function (a, it) { return a + byId[it.id].price * it.qty; }, 0); }
+  function bagCount() { return bag.reduce(function (a, it) { return a + it.qty; }, 0); }
+  function itemLine(it) {
+    var p = byId[it.id];
+    return '• ' + it.qty + '× ' + p.name + ' — color ' + col(it.color).name + (p.logo ? ' — con nuestro logo' : (it.text ? ' — "' + it.text + '"' : '')) + ' — ' + gs(p.price * it.qty);
+  }
+  function orderMsg(items) {
+    var total = items.reduce(function (a, it) { return a + byId[it.id].price * it.qty; }, 0);
+    return '¡Hola Formelia! Quiero hacer este pedido:\n' + items.map(itemLine).join('\n') + '\n\nTotal estimado: ' + gs(total) + '\n¿Me confirman el plazo y el envío?';
+  }
+  function refreshBag() {
+    var n = bagCount();
+    document.getElementById('bagN').textContent = n;
+    document.getElementById('floatN').textContent = n + (n === 1 ? ' pieza' : ' piezas');
+    document.getElementById('floatT').textContent = gs(bagTotal());
+    document.getElementById('float').hidden = n === 0 || !document.getElementById('pageAbout').hidden;
+  }
+
+  /* catalog */
+  var current = 'all';
+  var chips = document.getElementById('chips');
+  function renderChips() {
+    var h = '<button class="chip" type="button" data-line="all" aria-pressed="' + (current === 'all') + '"><b>Todo</b><small>' + P.length + ' piezas</small></button>';
+    if (COLECCION.activa) h += '<button class="chip chip-col" type="button" data-line="col" aria-pressed="' + (current === 'col') + '" style="--c:' + COLECCION.color + ';--on:' + COLECCION.tinta + '"><b>' + esc(COLECCION.chip) + '</b><small>del momento</small></button>';
+    Object.keys(LINES).forEach(function (k) {
+      var L = LINES[k];
+      h += '<button class="chip" type="button" data-line="' + k + '" aria-pressed="' + (current === k) + '" style="--c:' + L.c + ';--on:' + L.on + '"><b>' + L.name + '</b><small>“' + L.gloss + '”</small></button>';
+    });
+    chips.innerHTML = h;
+    document.getElementById('lineIntro').textContent = current === 'all' ? 'Cuatro líneas, una para cada momento.' : current === 'col' ? COLECCION.etiqueta + ': ' + COLECCION.titulo + '.' : LINES[current].intro;
+  }
+  function renderGrid() {
+    var h = '';
+    var list = current === 'col' ? COLECCION.productos.map(function (id) { return byId[id]; }).filter(Boolean) : P.filter(function (p) { return current === 'all' || p.line === current; });
+    list.forEach(function (p, i) {
+      var L = LINES[p.line], c = col(p.color);
+      h += '<button class="card" type="button" data-id="' + p.id + '" style="--c:' + L.c + ';--tc:' + L.tc + ';animation-delay:' + (i % 6) * 40 + 'ms">' +
+        '<span class="art">' + art(p.art, c.hex, p.logo ? '' : p.text) + '<span class="b3d">3D</span></span>' +
+        '<span class="tag">' + L.name + '</span><h3>' + esc(p.name) + '</h3>' +
+        '<span class="pr">' + gs(p.price) + (p.min ? ' <small>c/u</small>' : '') + '</span></button>';
+    });
+    h += '<a class="card card-idea" href="' + wa('¡Hola Formelia! Tengo una idea para imprimir en 3D: ') + '" target="_blank" rel="noopener"><h3>¿Tenés otra idea?</h3><p>Contanos qué querés y te decimos si se puede imprimir.</p><span class="go">Escribinos →</span></a>';
+    document.getElementById('grid').innerHTML = h;
+  }
+  chips.addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    current = b.getAttribute('data-line'); renderChips(); renderGrid();
+  });
+  document.getElementById('grid').addEventListener('click', function (e) {
+    var b = e.target.closest('button.card'); if (b) openProduct(b.getAttribute('data-id'));
+  });
+
+  /* product sheet */
+  var sheet = document.getElementById('sheet'), sIn = document.getElementById('sheetIn'), st = null;
+  function openProduct(id) {
+    var p = byId[id];
+    st = { id: id, color: p.color, text: p.text || '', qty: p.min || 1 };
+    var L = LINES[p.line];
+    var sw = COLORS.map(function (c) { return '<button type="button" class="sw" role="radio" aria-checked="' + (c.id === st.color) + '" aria-label="' + c.name + '" data-c="' + c.id + '" style="--sw:' + c.hex + '"></button>'; }).join('');
+    sIn.innerHTML =
+      '<span class="grab" aria-hidden="true"></span><button class="x" type="button" aria-label="Cerrar" data-close>×</button>' +
+      '<div class="art" id="sArt" style="--c:' + L.c + '"><div class="s-svg" id="sSvg"></div><div class="v3d-host" id="s3d"></div><span class="hint3d">Girá con el dedo para ver todos los lados</span></div>' +
+      '<div style="display:grid;gap:8px"><span class="eyebrow" style="color:' + L.tc + '">formelia ' + L.name + '</span><h2 id="pName">' + esc(p.name) + '</h2>' +
+      '<p class="desc">' + esc(p.desc) + '</p><div class="meta">' + p.meta.map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('') + '</div></div>' +
+      '<div class="field"><span class="lbl" id="swLbl">Color · <span class="swname" id="swName">' + col(st.color).name + '</span></span><div class="swatches" role="radiogroup" aria-labelledby="swLbl" id="sws">' + sw + '</div></div>' +
+      (p.logo
+        ? '<div class="field"><span class="lbl">Tu logo</span><p class="hint">Después de pedir, mandanos tu logo por WhatsApp y te mostramos cómo queda antes de imprimir.</p></div>'
+        : '<div class="field"><label for="pText">' + (p.text ? 'Nombre o palabra' : 'Nombre (opcional)') + '</label><input type="text" id="pText" maxlength="' + p.max + '" autocomplete="off" value="' + esc(st.text) + '" placeholder="Escribí y miralo en la pieza"><span class="hint">Hasta ' + p.max + ' letras. Lo ves en vivo arriba.</span></div>') +
+      '<div class="row"><div class="field"><span class="lbl" id="qLbl">Cantidad' + (p.min ? ' (mín. ' + p.min + ')' : '') + '</span><div class="qty" role="group" aria-labelledby="qLbl"><button type="button" data-q="-1" aria-label="Menos">−</button><output id="qOut">' + st.qty + '</output><button type="button" data-q="1" aria-label="Más">+</button></div></div>' +
+      '<div class="total"><small>' + gs(p.price) + (p.min ? ' c/u' : ' cada una') + '</small><b id="sTotal"></b></div></div>' +
+      '<div class="actions"><button class="btn btn-ink btn-wide" type="button" id="addBtn">Agregar al pedido</button><a class="btn btn-wa btn-wide" id="sWa" href="#" target="_blank" rel="noopener">Pedir solo esto por WhatsApp</a></div>';
+    drawSheet();
+    if (!sheet.open) sheet.showModal();
+    sheet.scrollTop = 0;
+    var box = document.getElementById('sArt'), openId = st.id;
+    if (window.F3D) F3D.mount(document.getElementById('s3d'), function () { box.classList.add('touched'); }).then(function () {
+      if (!sheet.open || !st || st.id !== openId) return;
+      box.classList.add('is3d'); draw3d();
+    }).catch(function () { /* sin 3D: queda la ilustración */ });
+  }
+  function draw3d() {
+    if (!window.F3D || !F3D.isReady() || !document.getElementById('s3d')) return;
+    var p = byId[st.id], hex = col(st.color).hex;
+    F3D.show(p.art, hex, inkOn(hex), p.logo ? '' : st.text);
+  }
+  function drawSheet() {
+    var p = byId[st.id];
+    document.getElementById('sSvg').innerHTML = art(p.art, col(st.color).hex, p.logo ? '' : st.text);
+    if (document.getElementById('sArt').classList.contains('is3d')) draw3d();
+    document.getElementById('qOut').textContent = st.qty;
+    document.getElementById('sTotal').textContent = gs(p.price * st.qty);
+    document.getElementById('swName').textContent = col(st.color).name;
+    document.getElementById('sWa').href = wa(orderMsg([st]));
+  }
+  sIn.addEventListener('input', function (e) { if (e.target.id === 'pText') { st.text = e.target.value.trim(); drawSheet(); } });
+  sIn.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.closest('[data-close]')) { sheet.close(); return; }
+    var s = t.closest('.sw');
+    if (s) { st.color = s.getAttribute('data-c'); sIn.querySelectorAll('.sw').forEach(function (x) { x.setAttribute('aria-checked', x === s); }); drawSheet(); return; }
+    var q = t.closest('[data-q]');
+    if (q) { var p = byId[st.id], min = p.min || 1; st.qty = Math.max(min, Math.min(999, st.qty + (+q.getAttribute('data-q')) * (p.min ? 5 : 1))); drawSheet(); return; }
+    if (t.id === 'addBtn') {
+      var same = bag.filter(function (it) { return it.id === st.id && it.color === st.color && it.text === st.text; })[0];
+      if (same) same.qty += st.qty; else bag.push({ id: st.id, color: st.color, text: st.text, qty: st.qty });
+      save(); refreshBag(); sheet.close(); toast('Agregado a tu pedido');
+    }
+  });
+
+  /* bag sheet */
+  var bagD = document.getElementById('bag'), bIn = document.getElementById('bagIn');
+  function openBag() {
+    var list = bag.map(function (it, i) {
+      var p = byId[it.id], L = LINES[p.line];
+      return '<li><span class="art" style="--c:' + L.c + '">' + art(p.art, col(it.color).hex, p.logo ? '' : it.text) + '</span><div style="min-width:0"><h3>' + it.qty + '× ' + esc(p.name) + '</h3><p>' + col(it.color).name + (it.text && !p.logo ? ' · “' + esc(it.text) + '”' : '') + ' · ' + gs(p.price * it.qty) + '</p></div><button class="rm" type="button" data-rm="' + i + '">Quitar</button></li>';
+    }).join('');
+    bIn.innerHTML = '<span class="grab" aria-hidden="true"></span><button class="x" type="button" aria-label="Cerrar" data-close>×</button><h2 id="bagTitle" style="font-size:28px">Tu pedido</h2>' +
+      (bag.length
+        ? '<ul class="bag-list">' + list + '</ul><div class="row"><span style="font-weight:700">Total estimado</span><span class="total"><b>' + gs(bagTotal()) + '</b></span></div>' +
+          '<p class="hint">El envío y el plazo los confirmamos por WhatsApp. Seña del 50% al aprobar el diseño.</p>' +
+          '<div class="actions"><a class="btn btn-wa btn-wide" href="' + wa(orderMsg(bag)) + '" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a><button class="btn btn-ghost btn-wide" type="button" id="copyBtn">Copiar pedido</button></div>'
+        : '<p class="empty">Tu pedido está vacío. Elegí una pieza y personalizala.</p><button class="btn btn-ink btn-wide" type="button" data-close>Ver productos</button>');
+    if (!bagD.open) bagD.showModal();
+  }
+  bIn.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.closest('[data-close]')) { bagD.close(); return; }
+    var r = t.closest('[data-rm]');
+    if (r) { bag.splice(+r.getAttribute('data-rm'), 1); save(); refreshBag(); openBag(); return; }
+    if (t.id === 'copyBtn') {
+      var msg = orderMsg(bag);
+      var done = function () { toast('Pedido copiado'); };
+      try { navigator.clipboard.writeText(msg).then(done, function () { toast('No se pudo copiar'); }); } catch (err) { toast('No se pudo copiar'); }
+    }
+  });
+  sheet.addEventListener('close', function () { if (window.F3D) F3D.stop(); });
+  [sheet, bagD].forEach(function (d) { d.addEventListener('click', function (e) { if (e.target === d) d.close(); }); });
+  document.getElementById('bagBtn').addEventListener('click', openBag);
+  document.getElementById('floatBtn').addEventListener('click', openBag);
+
+  function renderColeccion() {
+    var el = document.getElementById('coleccion'), C = COLECCION;
+    var items = C.productos.map(function (id) { return byId[id]; }).filter(Boolean);
+    if (!C.activa || !items.length) { el.hidden = true; return; }
+    el.style.setProperty('--colc', C.color); el.style.setProperty('--colt', C.tinta);
+    var light = C.tinta !== '#17183A';
+    el.innerHTML = (C.deco || '') +
+      '<div class="col-txt"><span class="col-badge">' + esc(C.etiqueta) + '</span>' +
+      '<h2 id="colTitle">' + esc(C.titulo) + '</h2><p>' + esc(C.texto) + '</p></div>' +
+      '<div class="col-thumbs">' + items.slice(0, 3).map(function (p) {
+        var L = LINES[p.line];
+        return '<button class="col-th" type="button" data-id="' + p.id + '"><span class="art" style="--c:' + L.c + '">' + art(p.art, col(p.color).hex, p.logo ? '' : p.text) + '</span><b>' + esc(p.name) + '</b><span class="p">' + gs(p.price) + '</span></button>';
+      }).join('') + '</div>' +
+      '<button class="btn ' + (light ? 'btn-light' : 'btn-ink') + '" type="button" id="colBtn">' + esc(C.boton) + ' →</button>';
+    el.hidden = false;
+  }
+  document.getElementById('coleccion').addEventListener('click', function (e) {
+    var th = e.target.closest('.col-th');
+    if (th) { openProduct(th.getAttribute('data-id')); return; }
+    if (e.target.closest('#colBtn')) {
+      current = 'col'; renderChips(); renderGrid();
+      document.getElementById('catalogo').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+  });
+  document.getElementById('heroWa').href = wa('¡Hola Formelia! Quiero hacer una consulta.');
+  document.getElementById('b2bWa').href = wa('¡Hola Formelia! Tengo un negocio y quiero un presupuesto de regalos con mi logo.\nProducto: \nCantidad: ');
+
+  var tT;
+  function toast(m) {
+    var el = document.querySelector('.toast'); if (el) el.remove();
+    el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role', 'status'); el.textContent = m;
+    document.body.appendChild(el); clearTimeout(tT); tT = setTimeout(function () { el.remove(); }, 1800);
+  }
+
+  /* página Nosotras */
+  var mainEl = document.getElementById('inicio'), aboutEl = document.getElementById('pageAbout');
+  function showAbout(on) {
+    mainEl.hidden = on; aboutEl.hidden = !on; refreshBag(); window.scrollTo(0, 0);
+    if (!on) { var v = document.getElementById('aboutVideo'); if (v) v.pause(); }
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]'); if (!a) return;
+    var h = a.getAttribute('href').slice(1);
+    if (h === 'nosotras') { e.preventDefault(); showAbout(true); return; }
+    if (!aboutEl.hidden) {
+      showAbout(false);
+      var t = h && h !== 'inicio' ? document.getElementById(h) : null;
+      if (t) { e.preventDefault(); requestAnimationFrame(function () { t.scrollIntoView(); }); }
+    }
+  });
+  document.getElementById('aboutBack').addEventListener('click', function () { showAbout(false); });
+  document.getElementById('aboutWa').href = wa('¡Hola! Quiero conocer más sobre Formelia.');
+
+  /* menú del celular */
+  var menuBtn = document.getElementById('menuBtn'), navEl = document.getElementById('siteNav');
+  function setMenu(on) {
+    navEl.classList.toggle('open', on);
+    menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    menuBtn.setAttribute('aria-label', on ? 'Cerrar menú' : 'Abrir menú');
+  }
+  menuBtn.addEventListener('click', function (e) { e.stopPropagation(); setMenu(!navEl.classList.contains('open')); });
+  document.addEventListener('click', function (e) {
+    if (navEl.classList.contains('open') && (!e.target.closest('#siteNav') || e.target.closest('a'))) setMenu(false);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+
+  renderColeccion(); renderChips(); renderGrid(); refreshBag();
+  if (location.hash === '#nosotras') showAbout(true);
+  var h = (location.hash || '').slice(1); if (byId[h]) openProduct(h);
+})();
+</script>
+
+</body>
+</html>
