@@ -36,7 +36,8 @@ button { font: inherit; color: inherit; cursor: pointer }
 .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted) }
 
 /* header */
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--cream); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--line); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)) }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--cream) 92%, transparent); -webkit-backdrop-filter: saturate(1.4) blur(12px); backdrop-filter: saturate(1.4) blur(12px); border-bottom: 1px solid var(--line); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.top-in { max-width: 1200px; margin: 0 auto; height: 64px; display: flex; align-items: center; gap: 10px }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink) }
 .brand b { font-family: var(--display); font-weight: 600; font-size: 24px; letter-spacing: -0.03em }
 .bag-btn { position: relative; display: flex; align-items: center; gap: 8px; background: var(--ink); color: var(--cream); border: 0; border-radius: 999px; padding: 10px 16px; font-weight: 700; min-height: 44px }
@@ -78,15 +79,19 @@ button { font: inherit; color: inherit; cursor: pointer }
 .about-text .cta { margin-top: 8px }
 
 /* mobile menu */
-.menu-btn { width: 44px; height: 44px; flex: none; border-radius: 50%; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); display: grid; place-items: center; padding: 0 }
+.menu-btn { width: 44px; height: 44px; flex: none; border-radius: 14px; border: 0; background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--line); color: var(--ink); display: grid; place-items: center; padding: 0 }
 .menu-btn .i-close { display: none }
 .menu-btn[aria-expanded="true"] .i-open { display: none }
 .menu-btn[aria-expanded="true"] .i-close { display: block }
 @keyframes menu { from { transform: translateY(-8px); opacity: 0 } }
+.nav .ni, .nav-foot { display: none }
+body.menu-open { overflow: hidden }
 @media (max-width: 899px) {
-  .nav.open { display: flex; flex-direction: column; position: absolute; left: 0; right: 0; top: 100%; background: var(--cream); border-bottom: 1px solid var(--line); box-shadow: 0 18px 30px rgba(23,24,58,.10); padding: 4px max(16px, env(safe-area-inset-right, 0px)) 14px max(16px, env(safe-area-inset-left, 0px)); animation: menu .2s ease }
-  .nav.open a { color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 600; font-size: 22px; padding: 14px 0; border-bottom: 1px solid var(--line) }
-  .nav.open a:last-child { border-bottom: 0 }
+  .nav.open { display: flex; flex-direction: column; position: absolute; left: 0; right: 0; top: 100%; height: calc(100dvh - 65px - env(safe-area-inset-top, 0px)); overflow: auto; background: var(--cream); padding: 8px max(20px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); animation: menu .22s ease }
+  .nav.open > a { display: flex; align-items: center; gap: 16px; color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 600; font-size: 26px; letter-spacing: -0.02em; padding: 18px 2px; border-bottom: 1px solid var(--line); animation: menu .35s ease both; animation-delay: calc(var(--i) * 45ms) }
+  .nav.open > a::after { content: "\2192"; margin-left: auto; font-size: 20px; color: var(--muted) }
+  .nav.open .ni { display: block; width: 30px; height: 30px; flex: none }
+  .nav.open .nav-foot { display: grid; gap: 12px; margin-top: auto; padding-top: 28px; text-align: center; color: var(--muted); font-size: 14px }
 }
 @media (min-width: 900px) { .menu-btn { display: none } }
 
@@ -263,10 +268,10 @@ input[type=text] { font: inherit; font-size: 18px; padding: 12px 14px; border-ra
 .nav { display: none }
 section[id] { scroll-margin-top: 90px }
 @media (min-width: 900px) {
-  .top { padding-block: 16px }
-  .nav { display: flex; gap: 28px; font-weight: 600; font-size: 15px }
-  .nav a { color: var(--ink); text-decoration: none; padding: 10px 0 }
-  .nav a:hover { color: var(--cobalto) }
+  .top-in { height: 76px; gap: 16px }
+  .nav { display: flex; gap: 2px; font-weight: 600; font-size: 15px }
+  .nav a { color: var(--ink); text-decoration: none; padding: 10px 14px; border-radius: 999px; transition: background .15s ease }
+  .nav a:hover { background: var(--paper) }
   .wrap { max-width: 1200px; gap: 96px }
   .note { text-align: left }
   .hero { padding-top: 40px; gap: 48px }
@@ -318,13 +323,15 @@ section[id] { scroll-margin-top: 90px }
 <body>
 
 <header class="top">
+ <div class="top-in">
   <a class="brand" href="#inicio" aria-label="Formelia, inicio">
     <svg width="34" height="34" viewBox="0 0 128 128" aria-hidden="true"><circle cx="34" cy="34" r="28" fill="#2F55E8"/><rect x="68" y="6" width="56" height="56" rx="18" fill="#FFC93C"/><path d="M30 76 Q34 69 38 76 L60 114 Q63 122 54 122 L14 122 Q5 122 8 114 Z" fill="#FF6A3D"/><path d="M68 122 A56 56 0 0 1 124 66 L124 112 Q124 122 114 122 Z" fill="#E8368F"/></svg>
     <b>formelia</b>
   </a>
-  <nav class="nav" id="siteNav" aria-label="Secciones"><a href="#catalogo">Productos</a><a href="#como">Cómo pedir</a><a href="#empresas">Empresas</a><a href="#preguntas">Preguntas</a><a href="#nosotras">Nosotras</a></nav>
+  <nav class="nav" id="siteNav" aria-label="Secciones"><a href="#catalogo" style="--i:0"><svg class="ni" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="#2F55E8"/></svg>Productos</a><a href="#como" style="--i:1"><svg class="ni" viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="4" width="56" height="56" rx="18" fill="#FFC93C"/></svg>Cómo pedir</a><a href="#empresas" style="--i:2"><svg class="ni" viewBox="0 0 64 64" aria-hidden="true"><path d="M28 12 Q32 5 36 12 L58 50 Q61 58 52 58 L12 58 Q3 58 6 50 Z" fill="#FF6A3D"/></svg>Empresas</a><a href="#preguntas" style="--i:3"><svg class="ni" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 60 A56 56 0 0 1 60 4 L60 50 Q60 60 50 60 Z" fill="#E8368F"/></svg>Preguntas</a><a href="#nosotras" style="--i:4"><svg class="ni" viewBox="0 0 64 64" aria-hidden="true"><circle cx="17" cy="17" r="13" fill="#2F55E8"/><rect x="34" y="4" width="26" height="26" rx="8" fill="#FFC93C"/><path d="M15 36 Q17 33 19 36 L29 54 Q30 58 26 58 L8 58 Q4 58 5 54 Z" fill="#FF6A3D"/><path d="M34 60 A26 26 0 0 1 60 34 L60 55 Q60 60 55 60 Z" fill="#E8368F"/></svg>Nosotras</a><div class="nav-foot"><a class="btn btn-wa btn-wide" id="navWa" href="https://wa.me/595975113793" target="_blank" rel="noopener">Escribinos por WhatsApp</a><p>@formelia.3d.py · Encarnación, Paraguay</p></div></nav>
   <button class="bag-btn" id="bagBtn" type="button" aria-label="Abrir tu pedido"><svg class="bag-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="bag-l">Tu pedido</span> <span class="n" id="bagN">0</span></button>
   <button class="menu-btn" id="menuBtn" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="siteNav"><svg class="i-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg><svg class="i-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+ </div>
 </header>
 
 <main class="wrap" id="inicio">
@@ -922,6 +929,7 @@ window.F3D = (function () {
   var menuBtn = document.getElementById('menuBtn'), navEl = document.getElementById('siteNav');
   function setMenu(on) {
     navEl.classList.toggle('open', on);
+    document.body.classList.toggle('menu-open', on);
     menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
     menuBtn.setAttribute('aria-label', on ? 'Cerrar menú' : 'Abrir menú');
   }
