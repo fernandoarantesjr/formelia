@@ -108,7 +108,8 @@ body.menu-open { overflow: hidden }
 .band-col p { max-width: 34ch }
 .col-marquee { position: relative; min-width: 0; overflow: hidden; margin-inline: -8px; padding: 6px 8px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent) }
 .col-track { display: flex; gap: 12px; width: max-content; animation: colScroll var(--dur, 60s) linear infinite }
-.col-marquee:hover .col-track, .col-track:focus-within { animation-play-state: paused }
+.col-track:has(.col-th:focus-visible) { animation-play-state: paused }
+@media (hover: hover) { .col-marquee:hover .col-track { animation-play-state: paused } }
 @keyframes colScroll { to { transform: translateX(calc(-50% - 6px)) } }
 .col-track .col-th { flex: none; width: 150px }
 @media (prefers-reduced-motion: reduce) { .col-marquee { overflow-x: auto } .col-track { animation: none } }
@@ -981,7 +982,11 @@ window.F3D = (function () {
       try { navigator.clipboard.writeText(msg).then(done, function () { toast('No se pudo copiar'); }); } catch (err) { toast('No se pudo copiar'); }
     }
   });
-  sheet.addEventListener('close', function () { if (window.F3D) F3D.stop(); });
+  sheet.addEventListener('close', function () {
+    if (window.F3D) F3D.stop();
+    /* al cerrar, el foco vuelve al card del carrusel: lo soltamos para que siga andando */
+    var a = document.activeElement; if (a && a.closest && a.closest('.col-marquee')) a.blur();
+  });
   [sheet, bagD].forEach(function (d) { d.addEventListener('click', function (e) { if (e.target === d) d.close(); }); });
   document.getElementById('bagBtn').addEventListener('click', openBag);
   document.getElementById('floatBtn').addEventListener('click', openBag);
