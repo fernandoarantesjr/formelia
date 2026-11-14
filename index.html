@@ -614,10 +614,19 @@ window.F3D = (function () {
       if (!R) return;
       var tok = ++token;
       if (!models[url]) models[url] = new Promise(function (res, rej) {
-        new THREE.GLTFLoader().load(url, function (g) {
+        var done = function (g) {
           g.scene.traverse(function (n) { if (n.isMesh && !n.geometry.attributes.normal) n.geometry.computeVertexNormals(); });
           res(g.scene);
-        }, undefined, rej);
+        };
+        /* si el .glb no se puede servir, se usa una copia en .glb.js (base64) */
+        var fallback = function () {
+          load(url + '.js').then(function () {
+            var b = atob((window.FGLB || {})[url] || ''), u = new Uint8Array(b.length);
+            for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
+            new THREE.GLTFLoader().parse(u.buffer, '', done, rej);
+          }, rej);
+        };
+        new THREE.GLTFLoader().load(url, done, undefined, fallback);
       });
       models[url].then(function (src) {
         if (tok !== token || !host) return;
