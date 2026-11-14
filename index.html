@@ -120,6 +120,16 @@ body.menu-open { overflow: hidden }
 .art img.ph { width: 100%; height: 100%; object-fit: cover; display: block }
 .card .art:has(img.ph) { background: var(--paper) }
 
+/* galería de fotos */
+.gal-wrap { display: grid; gap: 10px; min-width: 0 }
+.gal { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; border-radius: 22px; background: var(--paper); scrollbar-width: none; aspect-ratio: 4 / 3; max-width: 100% }
+.gal::-webkit-scrollbar { display: none }
+.gal img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: center; display: block }
+.gal-thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px }
+.gal-th { padding: 0; border: 0; border-radius: 12px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--paper); box-shadow: 0 0 0 1.5px var(--line); opacity: .7; transition: opacity .15s, box-shadow .15s }
+.gal-th img { width: 100%; height: 100%; object-fit: cover; display: block }
+.gal-th[aria-current="true"] { opacity: 1; box-shadow: 0 0 0 3px var(--ink) }
+
 /* about video */
 .about-video-wrap { display: grid; gap: 16px }
 .vid-title { font-size: 28px }
@@ -318,8 +328,8 @@ section[id] { scroll-margin-top: 90px }
   dialog#sheet { max-width: 1040px }
   #sheetIn { grid-template-columns: 1.1fr 1fr; column-gap: 40px; row-gap: 18px; padding: 36px; align-items: start }
   #sheetIn > .grab { display: none }
-  #sheetIn > #sArt { grid-column: 1; grid-row: 1 / span 8 }
-  #sheetIn > *:not(#sArt):not(.x) { grid-column: 2 }
+  #sheetIn > #sArt, #sheetIn > .gal-wrap { grid-column: 1; grid-row: 1 / span 8 }
+  #sheetIn > *:not(#sArt):not(.gal-wrap):not(.x) { grid-column: 2 }
   .float button { max-width: 420px; margin-right: 0 }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -687,7 +697,7 @@ window.F3D = (function () {
     { id: 'portaesmaltes', line: 'mbaapo', name: 'Porta esmaltes con tu logo', price: 35000, min: 20, art: 'nails', color: 'blanco', logo: true, desc: 'Organizador de esmaltes con el logo de tu salón o estudio. Un regalo útil para tus clientas que lleva tu marca.', meta: ['Desde 20 unidades', '5 a 10 días'] },
     { id: 'display', line: 'mbaapo', name: 'Display de mostrador', price: 90000, min: 10, art: 'display', color: 'cobalto', logo: true, desc: 'Cartel de mostrador con tu logo, para la caja, la vidriera o la recepción.', meta: ['Desde 10 unidades', '7 a 12 días'] },
     { id: 'llavero-logo', line: 'mbaapo', name: 'Llavero con tu logo', price: 18000, min: 20, art: 'keychain', color: 'marino', logo: true, desc: 'Llaveros con tu marca para regalar a clientes o entregar en eventos.', meta: ['Desde 20 unidades', '5 a 10 días'] },
-    { id: 'muneco', line: 'arete', name: 'Muñeco de nieve tejido', price: null, art: 'glb', model: 'models/snowman.glb', img: 'images/muneco-nieve.jpg', color: 'rojo', colors: ['rojo'], noText: true, desc: 'Muñeco de nieve con textura de tejido, gorro con pompón y bufanda roja. Lo imprimimos en varias piezas y lo armamos a mano.', meta: ['Armado a mano', 'Colores como en la foto'] },
+    { id: 'muneco', line: 'arete', name: 'Muñeco de nieve tejido', price: null, art: 'photo', img: 'images/muneco-frente-800.webp', imgs: [['images/muneco-frente.webp', 'De frente'], ['images/muneco-lado.webp', 'De costado'], ['images/muneco-atras.webp', 'De espaldas'], ['images/muneco-render.webp', 'Vista ilustrada']], color: 'rojo', colors: ['rojo'], noText: true, desc: 'Muñeco de nieve con textura de tejido, gorro con pompón y bufanda roja. Lo imprimimos en varias piezas y lo armamos a mano.', meta: ['Armado a mano', 'Colores como en la foto'] },
     { id: 'bolita', line: 'arete', name: 'Bolita de Navidad con nombre', price: 22000, art: 'ornament', color: 'tangerina', text: 'Sofía', max: 8, desc: 'Una bolita para el arbolito con el nombre de cada uno de la familia.', meta: ['8 cm', 'Con cinta'] },
     { id: 'topper', line: 'arete', name: 'Topper de torta', price: 35000, art: 'topper', color: 'pitaya', text: 'Lucas', max: 10, desc: 'Topper para la torta con el nombre del cumpleañero.', meta: ['15 cm de ancho'] },
     { id: 'estrella', line: 'arete', name: 'Estrella para el árbol', price: 30000, art: 'star', color: 'sol', text: 'Familia', max: 10, desc: 'Estrella para la punta del arbolito, con el apellido de la familia.', meta: ['12 cm'] }
@@ -819,7 +829,7 @@ window.F3D = (function () {
     list.forEach(function (p, i) {
       var L = LINES[p.line], c = col(p.color);
       h += '<button class="card" type="button" data-id="' + p.id + '" style="--c:' + L.c + ';--tc:' + L.tc + ';animation-delay:' + (i % 6) * 40 + 'ms">' +
-        '<span class="art">' + pic(p, c.hex, p.logo ? '' : p.text) + '<span class="b3d">3D</span></span>' +
+        '<span class="art">' + pic(p, c.hex, p.logo ? '' : p.text) + (p.imgs ? (p.imgs.length > 1 ? '<span class="b3d">' + p.imgs.length + ' fotos</span>' : '') : '<span class="b3d">3D</span>') + '</span>' +
         '<span class="tag">' + L.name + '</span><h3>' + esc(p.name) + '</h3>' +
         '<span class="pr">' + money(p) + (p.min && p.price != null ? ' <small>c/u</small>' : '') + '</span></button>';
     });
@@ -843,7 +853,10 @@ window.F3D = (function () {
     var sw = okColors(p).map(function (c) { return '<button type="button" class="sw" role="radio" aria-checked="' + (c.id === st.color) + '" aria-label="' + c.name + '" data-c="' + c.id + '" style="--sw:' + c.hex + '"></button>'; }).join('');
     sIn.innerHTML =
       '<span class="grab" aria-hidden="true"></span><button class="x" type="button" aria-label="Cerrar" data-close>×</button>' +
-      '<div class="art" id="sArt" style="--c:' + L.c + '"><div class="s-svg" id="sSvg"></div><div class="v3d-host" id="s3d"></div><span class="hint3d">Girá con el dedo para ver todos los lados</span></div>' +
+      (p.imgs
+        ? '<div class="gal-wrap"><div class="gal" id="gal" tabindex="0" aria-label="Fotos de ' + esc(p.name) + '">' + p.imgs.map(function (im, i) { return '<img src="' + im[0] + '" alt="' + esc(p.name) + ', ' + esc(im[1]) + '"' + (i ? ' loading="lazy"' : '') + ' decoding="async">'; }).join('') + '</div>' +
+          (p.imgs.length > 1 ? '<div class="gal-thumbs" role="group" aria-label="Elegir foto">' + p.imgs.map(function (im, i) { return '<button type="button" class="gal-th" data-g="' + i + '" aria-label="' + esc(im[1]) + '"' + (i ? '' : ' aria-current="true"') + '><img src="' + im[0].replace('.webp', '-800.webp') + '" alt=""></button>'; }).join('') + '</div>' : '') + '</div>'
+        : '<div class="art" id="sArt" style="--c:' + L.c + '"><div class="s-svg" id="sSvg"></div><div class="v3d-host" id="s3d"></div><span class="hint3d">Girá con el dedo para ver todos los lados</span></div>') +
       '<div style="display:grid;gap:8px"><span class="eyebrow" style="color:' + L.tc + '">formelia ' + L.name + '</span><h2 id="pName">' + esc(p.name) + '</h2>' +
       '<p class="desc">' + esc(p.desc) + '</p><div class="meta">' + p.meta.map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('') + '</div></div>' +
       (okColors(p).length < 2 ? '' : '<div class="field"><span class="lbl" id="swLbl">Color · <span class="swname" id="swName">' + col(st.color).name + '</span></span><div class="swatches" role="radiogroup" aria-labelledby="swLbl" id="sws">' + sw + '</div></div>') +
@@ -857,6 +870,7 @@ window.F3D = (function () {
     if (!sheet.open) sheet.showModal();
     sheet.scrollTop = 0;
     var box = document.getElementById('sArt'), openId = st.id;
+    if (p.imgs) { setupGal(); return; }
     if (window.F3D) F3D.mount(document.getElementById('s3d'), function () { box.classList.add('touched'); }).then(function () {
       if (!sheet.open || !st || st.id !== openId) return;
       box.classList.add('is3d'); draw3d();
@@ -867,10 +881,24 @@ window.F3D = (function () {
     var p = byId[st.id], hex = col(st.color).hex;
     if (p.model) F3D.showModel(p.model, hex); else F3D.show(p.art, hex, inkOn(hex), p.logo ? '' : st.text);
   }
+  function setupGal() {
+    var g = document.getElementById('gal'), th = sIn.querySelectorAll('.gal-th');
+    if (!g) return;
+    var go = function (i) { g.scrollTo({ left: i * g.clientWidth, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); };
+    th.forEach(function (b) { b.addEventListener('click', function () { go(+b.getAttribute('data-g')); }); });
+    g.addEventListener('scroll', function () {
+      var i = Math.round(g.scrollLeft / Math.max(1, g.clientWidth));
+      th.forEach(function (b, k) { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    }, { passive: true });
+    g.addEventListener('keydown', function (e) {
+      var i = Math.round(g.scrollLeft / Math.max(1, g.clientWidth));
+      if (e.key === 'ArrowRight') go(Math.min(th.length - 1, i + 1)); if (e.key === 'ArrowLeft') go(Math.max(0, i - 1));
+    });
+  }
   function drawSheet() {
     var p = byId[st.id];
-    document.getElementById('sSvg').innerHTML = pic(p, col(st.color).hex, p.logo ? '' : st.text);
-    if (document.getElementById('sArt').classList.contains('is3d')) draw3d();
+    if (document.getElementById('sSvg')) document.getElementById('sSvg').innerHTML = pic(p, col(st.color).hex, p.logo ? '' : st.text);
+    if (document.getElementById('sArt') && document.getElementById('sArt').classList.contains('is3d')) draw3d();
     document.getElementById('qOut').textContent = st.qty;
     document.getElementById('sTotal').textContent = money(p, st.qty);
     var swn = document.getElementById('swName'); if (swn) swn.textContent = col(st.color).name;
