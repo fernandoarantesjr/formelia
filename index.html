@@ -116,6 +116,10 @@ body.menu-open { overflow: hidden }
 .band-col .btn { position: relative; width: 100% }
 .chip-col b::before { content: "★ " }
 
+/* fotos de producto */
+.art img.ph { width: 100%; height: 100%; object-fit: cover; display: block }
+.card .art:has(img.ph) { background: var(--paper) }
+
 /* about video */
 .about-video-wrap { display: grid; gap: 16px }
 .vid-title { font-size: 28px }
@@ -449,9 +453,10 @@ section[id] { scroll-margin-top: 90px }
 window.F3D = (function () {
   var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
   var ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+  var token = 0, models = {}, GLTF_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
   var loading = null, R, scene, camera, controls, group, shadow, layerTex, raf = 0, resumeT = 0, lastKind = '', ro = null, host = null, onTouch = null;
   function load(src) { return new Promise(function (res, rej) { var s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
-  function ready() { if (!loading) loading = load(THREE_URL).then(function () { return load(ORBIT_URL); }).then(init); return loading; }
+  function ready() { if (!loading) loading = load(THREE_URL).then(function () { return load(ORBIT_URL); }).then(function () { return load(GLTF_URL); }).then(init); return loading; }
   function init() {
     R = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     R.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
@@ -586,7 +591,7 @@ window.F3D = (function () {
     }
     return G;
   }
-  function dispose(o) { o.traverse(function (n) { if (n.geometry) n.geometry.dispose(); if (n.material) { if (n.material.map) n.material.map.dispose(); if (n.material.bumpMap) n.material.bumpMap.dispose(); n.material.dispose(); } }); }
+  function dispose(o) { o.traverse(function (n) { if (n.geometry && !n.userData.keep) n.geometry.dispose(); if (n.material) { if (n.material.map) n.material.map.dispose(); if (n.material.bumpMap) n.material.bumpMap.dispose(); n.material.dispose(); } }); }
   function fitCamera(reset) {
     var box = new THREE.Box3().setFromObject(group), c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
     group.position.sub(c);
@@ -605,8 +610,35 @@ window.F3D = (function () {
         resize(); cancelAnimationFrame(raf); loop();
       });
     },
+    showModel: function (url, hex) {
+      if (!R) return;
+      var tok = ++token;
+      if (!models[url]) models[url] = new Promise(function (res, rej) {
+        new THREE.GLTFLoader().load(url, function (g) {
+          g.scene.traverse(function (n) { if (n.isMesh && !n.geometry.attributes.normal) n.geometry.computeVertexNormals(); });
+          res(g.scene);
+        }, undefined, rej);
+      });
+      models[url].then(function (src) {
+        if (tok !== token || !host) return;
+        if (group) { scene.remove(group); dispose(group); }
+        var m = src.clone(true);
+        m.traverse(function (n) {
+          if (!n.isMesh) return;
+          n.userData.keep = true;
+          var base = n.material && n.material.color ? n.material.color.clone() : new THREE.Color(1, 1, 1);
+          n.material = new THREE.MeshStandardMaterial({ color: /^accent/.test(n.name) ? lin(hex) : base, roughness: 0.78, metalness: 0 });
+        });
+        m.rotation.x = -Math.PI / 2;
+        var bx = new THREE.Box3().setFromObject(m), sz = bx.getSize(new THREE.Vector3());
+        m.scale.setScalar(4.2 / Math.max(sz.x, sz.y, sz.z));
+        group = new THREE.Group(); group.add(m); scene.add(group);
+        fitCamera(url !== lastKind); lastKind = url;
+      });
+    },
     show: function (kind, hex, ink, text) {
       if (!R) return;
+      token++;
       if (group) { scene.remove(group); dispose(group); }
       group = build(kind, hex, ink, text); scene.add(group);
       fitCamera(kind !== lastKind); lastKind = kind;
@@ -627,7 +659,8 @@ window.F3D = (function () {
     { id: 'tangerina', name: 'Tangerina', hex: '#FF6A3D' },
     { id: 'pitaya', name: 'Pitaya', hex: '#E8368F' },
     { id: 'marino', name: 'Marino', hex: '#17183A' },
-    { id: 'blanco', name: 'Blanco', hex: '#FFFFFF' }
+    { id: 'blanco', name: 'Blanco', hex: '#FFFFFF' },
+    { id: 'rojo', name: 'Rojo', hex: '#E8402E', only: true }
   ];
   var LINES = {
     mbaei: { name: 'mba’e’i', gloss: 'cosita', c: '#E8368F', tc: '#C42675', on: '#FFFFFF', intro: 'Mimos y recuerditos para regalar.' },
@@ -645,6 +678,7 @@ window.F3D = (function () {
     { id: 'portaesmaltes', line: 'mbaapo', name: 'Porta esmaltes con tu logo', price: 35000, min: 20, art: 'nails', color: 'blanco', logo: true, desc: 'Organizador de esmaltes con el logo de tu salón o estudio. Un regalo útil para tus clientas que lleva tu marca.', meta: ['Desde 20 unidades', '5 a 10 días'] },
     { id: 'display', line: 'mbaapo', name: 'Display de mostrador', price: 90000, min: 10, art: 'display', color: 'cobalto', logo: true, desc: 'Cartel de mostrador con tu logo, para la caja, la vidriera o la recepción.', meta: ['Desde 10 unidades', '7 a 12 días'] },
     { id: 'llavero-logo', line: 'mbaapo', name: 'Llavero con tu logo', price: 18000, min: 20, art: 'keychain', color: 'marino', logo: true, desc: 'Llaveros con tu marca para regalar a clientes o entregar en eventos.', meta: ['Desde 20 unidades', '5 a 10 días'] },
+    { id: 'muneco', line: 'arete', name: 'Muñeco de nieve tejido', price: null, art: 'glb', model: 'models/snowman.glb', img: 'images/muneco-nieve.jpg', color: 'rojo', colors: ['rojo', 'cobalto', 'sol', 'tangerina', 'pitaya', 'marino'], noText: true, desc: 'Muñeco de nieve con textura de tejido, gorro con pompón y bufanda. Lo imprimimos en varias piezas y lo armamos a mano. Elegí el color del gorro y la bufanda.', meta: ['Armado a mano', 'Gorro y bufanda a elección'] },
     { id: 'bolita', line: 'arete', name: 'Bolita de Navidad con nombre', price: 22000, art: 'ornament', color: 'tangerina', text: 'Sofía', max: 8, desc: 'Una bolita para el arbolito con el nombre de cada uno de la familia.', meta: ['8 cm', 'Con cinta'] },
     { id: 'topper', line: 'arete', name: 'Topper de torta', price: 35000, art: 'topper', color: 'pitaya', text: 'Lucas', max: 10, desc: 'Topper para la torta con el nombre del cumpleañero.', meta: ['15 cm de ancho'] },
     { id: 'estrella', line: 'arete', name: 'Estrella para el árbol', price: 30000, art: 'star', color: 'sol', text: 'Familia', max: 10, desc: 'Estrella para la punta del arbolito, con el apellido de la familia.', meta: ['12 cm'] }
@@ -661,7 +695,7 @@ window.F3D = (function () {
     texto: 'Adornos personalizados para el arbolito y para regalar. Pedidos hasta el [FECHA].',
     color: '#FF6A3D',
     tinta: '#17183A',
-    productos: ['bolita', 'estrella', 'topper'],
+    productos: ['muneco', 'bolita', 'estrella', 'topper'],
     boton: 'Ver la colección',
     deco: '<svg class="deco" viewBox="0 0 120 150" aria-hidden="true"><circle cx="60" cy="12" r="10" fill="#FFC93C"/><path d="M52 30 Q60 18 68 30 L104 86 Q110 96 98 96 L22 96 Q10 96 16 86 Z" fill="#FFF3E8"/><rect x="48" y="98" width="24" height="26" rx="6" fill="#17183A"/><circle cx="46" cy="70" r="7" fill="#2F55E8"/><circle cx="74" cy="58" r="6" fill="#E8368F"/><circle cx="70" cy="84" r="6" fill="#2F55E8"/></svg>'
   };
@@ -670,6 +704,9 @@ window.F3D = (function () {
   function col(id) { for (var i = 0; i < COLORS.length; i++) if (COLORS[i].id === id) return COLORS[i]; return COLORS[0]; }
   function inkOn(hex) { return (hex === '#FFC93C' || hex === '#FFFFFF') ? '#17183A' : '#FFFFFF'; }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function money(p, q) { return p.price == null ? 'A consultar' : gs(p.price * (q || 1)); }
+  function pic(p, hex, t) { return p.img ? '<img class="ph" src="' + p.img + '" alt="" loading="lazy">' : art(p.art, hex, t); }
+  function okColors(p) { return p.colors ? COLORS.filter(function (c) { return p.colors.indexOf(c.id) > -1; }) : COLORS.filter(function (c) { return !c.only; }); }
   function gs(n) { return 'Gs. ' + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
   function wa(msg) { return 'https://wa.me/' + WPP + '?text=' + encodeURIComponent(msg); }
 
@@ -736,15 +773,15 @@ window.F3D = (function () {
   try { bag = JSON.parse(localStorage.getItem('formelia-bolsa') || '[]') || []; } catch (e) { bag = []; }
   bag = bag.filter(function (it) { return byId[it.id]; });
   function save() { try { localStorage.setItem('formelia-bolsa', JSON.stringify(bag)); } catch (e) {} }
-  function bagTotal() { return bag.reduce(function (a, it) { return a + byId[it.id].price * it.qty; }, 0); }
+  function bagTotal() { return bag.reduce(function (a, it) { return a + (byId[it.id].price || 0) * it.qty; }, 0); }
   function bagCount() { return bag.reduce(function (a, it) { return a + it.qty; }, 0); }
   function itemLine(it) {
     var p = byId[it.id];
-    return '• ' + it.qty + '× ' + p.name + ' — color ' + col(it.color).name + (p.logo ? ' — con nuestro logo' : (it.text ? ' — "' + it.text + '"' : '')) + ' — ' + gs(p.price * it.qty);
+    return '• ' + it.qty + '× ' + p.name + ' — color ' + col(it.color).name + (p.logo ? ' — con nuestro logo' : (it.text ? ' — "' + it.text + '"' : '')) + ' — ' + (p.price == null ? 'precio a consultar' : gs(p.price * it.qty));
   }
   function orderMsg(items) {
-    var total = items.reduce(function (a, it) { return a + byId[it.id].price * it.qty; }, 0);
-    return '¡Hola Formelia! Quiero hacer este pedido:\n' + items.map(itemLine).join('\n') + '\n\nTotal estimado: ' + gs(total) + '\n¿Me confirman el plazo y el envío?';
+    var total = items.reduce(function (a, it) { return a + (byId[it.id].price || 0) * it.qty; }, 0);
+    return '¡Hola Formelia! Quiero hacer este pedido:\n' + items.map(itemLine).join('\n') + '\n\nTotal estimado: ' + gs(total) + (items.some(function (it) { return byId[it.id].price == null; }) ? ' + piezas a consultar' : '') + '\n¿Me confirman el plazo y el envío?';
   }
   function refreshBag() {
     var n = bagCount();
@@ -773,9 +810,9 @@ window.F3D = (function () {
     list.forEach(function (p, i) {
       var L = LINES[p.line], c = col(p.color);
       h += '<button class="card" type="button" data-id="' + p.id + '" style="--c:' + L.c + ';--tc:' + L.tc + ';animation-delay:' + (i % 6) * 40 + 'ms">' +
-        '<span class="art">' + art(p.art, c.hex, p.logo ? '' : p.text) + '<span class="b3d">3D</span></span>' +
+        '<span class="art">' + pic(p, c.hex, p.logo ? '' : p.text) + '<span class="b3d">3D</span></span>' +
         '<span class="tag">' + L.name + '</span><h3>' + esc(p.name) + '</h3>' +
-        '<span class="pr">' + gs(p.price) + (p.min ? ' <small>c/u</small>' : '') + '</span></button>';
+        '<span class="pr">' + money(p) + (p.min && p.price != null ? ' <small>c/u</small>' : '') + '</span></button>';
     });
     h += '<a class="card card-idea" href="' + wa('¡Hola Formelia! Tengo una idea para imprimir en 3D: ') + '" target="_blank" rel="noopener"><h3>¿Tenés otra idea?</h3><p>Contanos qué querés y te decimos si se puede imprimir.</p><span class="go">Escribinos →</span></a>';
     document.getElementById('grid').innerHTML = h;
@@ -794,18 +831,18 @@ window.F3D = (function () {
     var p = byId[id];
     st = { id: id, color: p.color, text: p.text || '', qty: p.min || 1 };
     var L = LINES[p.line];
-    var sw = COLORS.map(function (c) { return '<button type="button" class="sw" role="radio" aria-checked="' + (c.id === st.color) + '" aria-label="' + c.name + '" data-c="' + c.id + '" style="--sw:' + c.hex + '"></button>'; }).join('');
+    var sw = okColors(p).map(function (c) { return '<button type="button" class="sw" role="radio" aria-checked="' + (c.id === st.color) + '" aria-label="' + c.name + '" data-c="' + c.id + '" style="--sw:' + c.hex + '"></button>'; }).join('');
     sIn.innerHTML =
       '<span class="grab" aria-hidden="true"></span><button class="x" type="button" aria-label="Cerrar" data-close>×</button>' +
       '<div class="art" id="sArt" style="--c:' + L.c + '"><div class="s-svg" id="sSvg"></div><div class="v3d-host" id="s3d"></div><span class="hint3d">Girá con el dedo para ver todos los lados</span></div>' +
       '<div style="display:grid;gap:8px"><span class="eyebrow" style="color:' + L.tc + '">formelia ' + L.name + '</span><h2 id="pName">' + esc(p.name) + '</h2>' +
       '<p class="desc">' + esc(p.desc) + '</p><div class="meta">' + p.meta.map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('') + '</div></div>' +
       '<div class="field"><span class="lbl" id="swLbl">Color · <span class="swname" id="swName">' + col(st.color).name + '</span></span><div class="swatches" role="radiogroup" aria-labelledby="swLbl" id="sws">' + sw + '</div></div>' +
-      (p.logo
+      (p.noText ? '' : p.logo
         ? '<div class="field"><span class="lbl">Tu logo</span><p class="hint">Después de pedir, mandanos tu logo por WhatsApp y te mostramos cómo queda antes de imprimir.</p></div>'
         : '<div class="field"><label for="pText">' + (p.text ? 'Nombre o palabra' : 'Nombre (opcional)') + '</label><input type="text" id="pText" maxlength="' + p.max + '" autocomplete="off" value="' + esc(st.text) + '" placeholder="Escribí y miralo en la pieza"><span class="hint">Hasta ' + p.max + ' letras. Lo ves en vivo arriba.</span></div>') +
       '<div class="row"><div class="field"><span class="lbl" id="qLbl">Cantidad' + (p.min ? ' (mín. ' + p.min + ')' : '') + '</span><div class="qty" role="group" aria-labelledby="qLbl"><button type="button" data-q="-1" aria-label="Menos">−</button><output id="qOut">' + st.qty + '</output><button type="button" data-q="1" aria-label="Más">+</button></div></div>' +
-      '<div class="total"><small>' + gs(p.price) + (p.min ? ' c/u' : ' cada una') + '</small><b id="sTotal"></b></div></div>' +
+      '<div class="total"><small>' + (p.price == null ? 'Precio' : gs(p.price) + (p.min ? ' c/u' : ' cada una')) + '</small><b id="sTotal"></b></div></div>' +
       '<div class="actions"><button class="btn btn-ink btn-wide" type="button" id="addBtn">Agregar al pedido</button><a class="btn btn-wa btn-wide" id="sWa" href="#" target="_blank" rel="noopener">Pedir solo esto por WhatsApp</a></div>';
     drawSheet();
     if (!sheet.open) sheet.showModal();
@@ -819,14 +856,14 @@ window.F3D = (function () {
   function draw3d() {
     if (!window.F3D || !F3D.isReady() || !document.getElementById('s3d')) return;
     var p = byId[st.id], hex = col(st.color).hex;
-    F3D.show(p.art, hex, inkOn(hex), p.logo ? '' : st.text);
+    if (p.model) F3D.showModel(p.model, hex); else F3D.show(p.art, hex, inkOn(hex), p.logo ? '' : st.text);
   }
   function drawSheet() {
     var p = byId[st.id];
-    document.getElementById('sSvg').innerHTML = art(p.art, col(st.color).hex, p.logo ? '' : st.text);
+    document.getElementById('sSvg').innerHTML = pic(p, col(st.color).hex, p.logo ? '' : st.text);
     if (document.getElementById('sArt').classList.contains('is3d')) draw3d();
     document.getElementById('qOut').textContent = st.qty;
-    document.getElementById('sTotal').textContent = gs(p.price * st.qty);
+    document.getElementById('sTotal').textContent = money(p, st.qty);
     document.getElementById('swName').textContent = col(st.color).name;
     document.getElementById('sWa').href = wa(orderMsg([st]));
   }
@@ -850,7 +887,7 @@ window.F3D = (function () {
   function openBag() {
     var list = bag.map(function (it, i) {
       var p = byId[it.id], L = LINES[p.line];
-      return '<li><span class="art" style="--c:' + L.c + '">' + art(p.art, col(it.color).hex, p.logo ? '' : it.text) + '</span><div style="min-width:0"><h3>' + it.qty + '× ' + esc(p.name) + '</h3><p>' + col(it.color).name + (it.text && !p.logo ? ' · “' + esc(it.text) + '”' : '') + ' · ' + gs(p.price * it.qty) + '</p></div><button class="rm" type="button" data-rm="' + i + '">Quitar</button></li>';
+      return '<li><span class="art" style="--c:' + L.c + '">' + pic(p, col(it.color).hex, p.logo ? '' : it.text) + '</span><div style="min-width:0"><h3>' + it.qty + '× ' + esc(p.name) + '</h3><p>' + col(it.color).name + (it.text && !p.logo ? ' · “' + esc(it.text) + '”' : '') + ' · ' + money(p, it.qty) + '</p></div><button class="rm" type="button" data-rm="' + i + '">Quitar</button></li>';
     }).join('');
     bIn.innerHTML = '<span class="grab" aria-hidden="true"></span><button class="x" type="button" aria-label="Cerrar" data-close>×</button><h2 id="bagTitle" style="font-size:28px">Tu pedido</h2>' +
       (bag.length
@@ -887,7 +924,7 @@ window.F3D = (function () {
       '<h2 id="colTitle">' + esc(C.titulo) + '</h2><p>' + esc(C.texto) + '</p></div>' +
       '<div class="col-thumbs">' + items.slice(0, 3).map(function (p) {
         var L = LINES[p.line];
-        return '<button class="col-th" type="button" data-id="' + p.id + '"><span class="art" style="--c:' + L.c + '">' + art(p.art, col(p.color).hex, p.logo ? '' : p.text) + '</span><b>' + esc(p.name) + '</b><span class="p">' + gs(p.price) + '</span></button>';
+        return '<button class="col-th" type="button" data-id="' + p.id + '"><span class="art" style="--c:' + L.c + '">' + pic(p, col(p.color).hex, p.logo ? '' : p.text) + '</span><b>' + esc(p.name) + '</b><span class="p">' + money(p) + '</span></button>';
       }).join('') + '</div>' +
       '<button class="btn ' + (light ? 'btn-light' : 'btn-ink') + '" type="button" id="colBtn">' + esc(C.boton) + ' →</button>';
     el.hidden = false;

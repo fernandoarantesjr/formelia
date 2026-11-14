@@ -13,3 +13,8 @@ En `index.html`, buscar `COLECCION` y cambiar título, texto, color y la lista d
 ## Productos
 Lista `P` en `index.html`: nombre, línea, precio, descripción.
 WhatsApp de pedidos: variable `WPP`.
+
+## Modelos 3D
+Cada producto puede tener `model: 'models/archivo.glb'` (modelo real) e `img: 'images/foto.jpg'` (foto del card).
+En el GLB, las piezas cuyo nombre empieza con `accent` toman el color elegido por el cliente.
+`price: null` muestra "A consultar".
