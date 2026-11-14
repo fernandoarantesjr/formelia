@@ -636,7 +636,7 @@ window.F3D = (function () {
           if (!n.isMesh) return;
           n.userData.keep = true;
           var base = n.material && n.material.color ? n.material.color.clone() : new THREE.Color(1, 1, 1);
-          n.material = new THREE.MeshStandardMaterial({ color: /^accent/.test(n.name) ? lin(hex) : base, roughness: 0.78, metalness: 0 });
+          n.material = new THREE.MeshStandardMaterial({ color: /^accent/.test(n.name) ? lin(hex) : base, roughness: /eye|btn|nose/.test(n.name) ? 0.3 : 0.78, metalness: 0 });
         });
         m.rotation.x = -Math.PI / 2;
         var bx = new THREE.Box3().setFromObject(m), sz = bx.getSize(new THREE.Vector3());
@@ -687,7 +687,7 @@ window.F3D = (function () {
     { id: 'portaesmaltes', line: 'mbaapo', name: 'Porta esmaltes con tu logo', price: 35000, min: 20, art: 'nails', color: 'blanco', logo: true, desc: 'Organizador de esmaltes con el logo de tu salón o estudio. Un regalo útil para tus clientas que lleva tu marca.', meta: ['Desde 20 unidades', '5 a 10 días'] },
     { id: 'display', line: 'mbaapo', name: 'Display de mostrador', price: 90000, min: 10, art: 'display', color: 'cobalto', logo: true, desc: 'Cartel de mostrador con tu logo, para la caja, la vidriera o la recepción.', meta: ['Desde 10 unidades', '7 a 12 días'] },
     { id: 'llavero-logo', line: 'mbaapo', name: 'Llavero con tu logo', price: 18000, min: 20, art: 'keychain', color: 'marino', logo: true, desc: 'Llaveros con tu marca para regalar a clientes o entregar en eventos.', meta: ['Desde 20 unidades', '5 a 10 días'] },
-    { id: 'muneco', line: 'arete', name: 'Muñeco de nieve tejido', price: null, art: 'glb', model: 'models/snowman.glb', img: 'images/muneco-nieve.jpg', color: 'rojo', colors: ['rojo', 'cobalto', 'sol', 'tangerina', 'pitaya', 'marino'], noText: true, desc: 'Muñeco de nieve con textura de tejido, gorro con pompón y bufanda. Lo imprimimos en varias piezas y lo armamos a mano. Elegí el color del gorro y la bufanda.', meta: ['Armado a mano', 'Gorro y bufanda a elección'] },
+    { id: 'muneco', line: 'arete', name: 'Muñeco de nieve tejido', price: null, art: 'glb', model: 'models/snowman.glb', img: 'images/muneco-nieve.jpg', color: 'rojo', colors: ['rojo'], noText: true, desc: 'Muñeco de nieve con textura de tejido, gorro con pompón y bufanda roja. Lo imprimimos en varias piezas y lo armamos a mano.', meta: ['Armado a mano', 'Colores como en la foto'] },
     { id: 'bolita', line: 'arete', name: 'Bolita de Navidad con nombre', price: 22000, art: 'ornament', color: 'tangerina', text: 'Sofía', max: 8, desc: 'Una bolita para el arbolito con el nombre de cada uno de la familia.', meta: ['8 cm', 'Con cinta'] },
     { id: 'topper', line: 'arete', name: 'Topper de torta', price: 35000, art: 'topper', color: 'pitaya', text: 'Lucas', max: 10, desc: 'Topper para la torta con el nombre del cumpleañero.', meta: ['15 cm de ancho'] },
     { id: 'estrella', line: 'arete', name: 'Estrella para el árbol', price: 30000, art: 'star', color: 'sol', text: 'Familia', max: 10, desc: 'Estrella para la punta del arbolito, con el apellido de la familia.', meta: ['12 cm'] }
@@ -846,7 +846,7 @@ window.F3D = (function () {
       '<div class="art" id="sArt" style="--c:' + L.c + '"><div class="s-svg" id="sSvg"></div><div class="v3d-host" id="s3d"></div><span class="hint3d">Girá con el dedo para ver todos los lados</span></div>' +
       '<div style="display:grid;gap:8px"><span class="eyebrow" style="color:' + L.tc + '">formelia ' + L.name + '</span><h2 id="pName">' + esc(p.name) + '</h2>' +
       '<p class="desc">' + esc(p.desc) + '</p><div class="meta">' + p.meta.map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('') + '</div></div>' +
-      '<div class="field"><span class="lbl" id="swLbl">Color · <span class="swname" id="swName">' + col(st.color).name + '</span></span><div class="swatches" role="radiogroup" aria-labelledby="swLbl" id="sws">' + sw + '</div></div>' +
+      (okColors(p).length < 2 ? '' : '<div class="field"><span class="lbl" id="swLbl">Color · <span class="swname" id="swName">' + col(st.color).name + '</span></span><div class="swatches" role="radiogroup" aria-labelledby="swLbl" id="sws">' + sw + '</div></div>') +
       (p.noText ? '' : p.logo
         ? '<div class="field"><span class="lbl">Tu logo</span><p class="hint">Después de pedir, mandanos tu logo por WhatsApp y te mostramos cómo queda antes de imprimir.</p></div>'
         : '<div class="field"><label for="pText">' + (p.text ? 'Nombre o palabra' : 'Nombre (opcional)') + '</label><input type="text" id="pText" maxlength="' + p.max + '" autocomplete="off" value="' + esc(st.text) + '" placeholder="Escribí y miralo en la pieza"><span class="hint">Hasta ' + p.max + ' letras. Lo ves en vivo arriba.</span></div>') +
@@ -873,7 +873,7 @@ window.F3D = (function () {
     if (document.getElementById('sArt').classList.contains('is3d')) draw3d();
     document.getElementById('qOut').textContent = st.qty;
     document.getElementById('sTotal').textContent = money(p, st.qty);
-    document.getElementById('swName').textContent = col(st.color).name;
+    var swn = document.getElementById('swName'); if (swn) swn.textContent = col(st.color).name;
     document.getElementById('sWa').href = wa(orderMsg([st]));
   }
   sIn.addEventListener('input', function (e) { if (e.target.id === 'pText') { st.text = e.target.value.trim(); drawSheet(); } });
